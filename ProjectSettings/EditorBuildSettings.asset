@@ -8,4 +8,13 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/MenuPrincipal.unity
     guid: 2cda990e2423bbf4892e6590ba056729
+  - enabled: 1
+    path: Assets/Scenes/CuentaVista.unity
+    guid: e008cb099536cce48b31f14d4569b67f
+  - enabled: 1
+    path: Assets/Scenes/AjusteVista.unity
+    guid: 3199cc7dfc8451d45a446e848600782f
+  - enabled: 1
+    path: Assets/Scenes/EstadisticasVista.unity
+    guid: 03d87907bd1328643b61593a7b6b1c7a
   m_configObjects: {}
