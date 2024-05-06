@@ -1,8 +1,5 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
-using static UnityEngine.Random;
 using TMPro;
 
 public class juego2 : MonoBehaviour
