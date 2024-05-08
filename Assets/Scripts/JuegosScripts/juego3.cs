@@ -10,6 +10,8 @@ public class juego3 : MonoBehaviour
     public TextMeshProUGUI txtPrin;
     public TextMeshProUGUI[] txtRpt;
 
+    private string respuestaCorrecta = "";
+
     void Start()
     {
         calcularSuma();
@@ -17,13 +19,13 @@ public class juego3 : MonoBehaviour
 
     public void calcularSuma()
     {
-        int num1 = Range(0, 100);
-        int num2 = Range(0, 100);
+        int num1 = Range(10, 100);
+        int num2 = Range(10, 100);
         while ((num1 + num2) > 100)
         {
             // Si es mayor que 100, generar nuevos números
-            num1 = Range(0, 100);
-            num2 = Range(0, 100);
+            num1 = Range(10, 100);
+            num2 = Range(10, 100);
         }
 
 
@@ -36,6 +38,8 @@ public class juego3 : MonoBehaviour
     {
         int ramdonIndex = Range(0, txtRpt.Length);
         txtRpt[ramdonIndex].text = $"{num1 + num2}";
+
+        respuestaCorrecta = txtRpt[ramdonIndex].text;
 
         List<int> availableIndexes = new List<int>();
         for (int i = 0; i < txtRpt.Length; i++) 
@@ -73,4 +77,9 @@ public class juego3 : MonoBehaviour
         }
     }
 
+    public void PresionarBoton(TextMeshProUGUI textoBoton)
+    {
+        if (textoBoton.text == respuestaCorrecta) Debug.Log("Respuesta Correcta");
+        else Debug.Log("Respuesta Incorrecta");
+    }
 }

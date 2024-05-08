@@ -10,6 +10,7 @@ public class juego2 : MonoBehaviour
     int num;
     int[] inferior;
     int[] superior;
+    string respuestaCorrecta = "";
 
     // Start is called before the first frame update
     void Start()
@@ -47,6 +48,7 @@ public class juego2 : MonoBehaviour
 
         int randomIndex = Random.Range(0, textRptIArray.Length);
         textRptIArray[randomIndex].text = $"{inferior[0]} | {superior[0]}";
+        respuestaCorrecta = textRptIArray[randomIndex].text;
 
         List<int> availableIndexes = new List<int>();
         for (int i = 0; i < textRptIArray.Length; i++)
@@ -101,5 +103,11 @@ public class juego2 : MonoBehaviour
             list[i] = list[randomIndex];
             list[randomIndex] = temp;
         }
+    }
+
+    public void PresionarBoton(TextMeshProUGUI textoBoton)
+    {
+        if (textoBoton.text == respuestaCorrecta) Debug.Log("Respuesta Correcta");
+        else Debug.Log("Respuesta Incorrecta");
     }
 }
