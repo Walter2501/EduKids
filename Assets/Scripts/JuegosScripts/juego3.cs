@@ -27,7 +27,7 @@ public class juego3 : MonoBehaviour
         }
 
 
-        txtPrin.text = $"{num1} + {num2}";
+        txtPrin.text = $"{num1} +\n<u>{num2}</u>\n??";
 
         dibujarRespuestas(num1, num2);
     }
