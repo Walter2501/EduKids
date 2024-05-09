@@ -8,10 +8,18 @@ public class Juego7 : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI[] textoBotones;
     [SerializeField] private TextMeshProUGUI textoSuma;
+    [SerializeField] private AudioClip win;
+    [SerializeField] private AudioClip wrong;
 
+    private AudioSource audioSource;
     private int num1 = 0;
     private int num2 = 0;
     private int suma = 0;
+
+    private void Awake()
+    {
+        audioSource = GetComponent<AudioSource>();
+    }
 
     private void Start()
     {
@@ -43,7 +51,20 @@ public class Juego7 : MonoBehaviour
 
     public void PresionarBoton(TextMeshProUGUI texto)
     {
-        if (texto.text == $"{suma}") Debug.Log("Respuesta Correcta");
-        else Debug.Log("Respuesta Incorrecta");
+        if (texto.text == $"{suma}")
+        {
+            Debug.Log("Respuesta correcta");
+            audioSource.clip = win;
+            audioSource.Play();
+            //SceneManager.LoadScene(0);
+        }
+
+        else
+        {
+            Debug.Log("Respuesta incorrecta");
+            audioSource.clip = wrong;
+            audioSource.Play();
+            //SceneManager.LoadScene(0);
+        }
     }
 }

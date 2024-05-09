@@ -9,7 +9,10 @@ public class JuegoReloj : MonoBehaviour
     [SerializeField] private Reloj[] relojsSO;
     [SerializeField] private TextMeshProUGUI[] textosHoras;
     [SerializeField] private Image relojImg;
+    [SerializeField] private AudioClip win;
+    [SerializeField] private AudioClip wrong;
 
+    private AudioSource audioSource;
     private Reloj relojElegido;
     private string[][] horas_minutos =
     {
@@ -19,6 +22,11 @@ public class JuegoReloj : MonoBehaviour
         new string[] {"01:45", "02:45", "03:45", "04:45", "05:45", "06:45", "07:45", "08:45", "09:45", "10:45", "11:45", "12:45"},
     };
     private string horaCorrecta = "";
+
+    private void Awake()
+    {
+        audioSource = GetComponent<AudioSource>();
+    }
 
     private void Start()
     {
@@ -62,7 +70,20 @@ public class JuegoReloj : MonoBehaviour
 
     public void PresionarBoton(TextMeshProUGUI textoBoton)
     {
-        if (textoBoton.text == horaCorrecta) Debug.Log("Respuesta Correcta");
-        else Debug.Log("Respuesta Incorrecta");
+        if (textoBoton.text == horaCorrecta)
+        {
+            Debug.Log("Respuesta correcta");
+            audioSource.clip = win;
+            audioSource.Play();
+            //SceneManager.LoadScene(0);
+        }
+
+        else
+        {
+            Debug.Log("Respuesta incorrecta");
+            audioSource.clip = wrong;
+            audioSource.Play();
+            //SceneManager.LoadScene(0);
+        }
     }
 }

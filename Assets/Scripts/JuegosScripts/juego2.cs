@@ -6,11 +6,19 @@ public class juego2 : MonoBehaviour
 {
     public TextMeshProUGUI textPrin;
     public TextMeshProUGUI[] textRptIArray;
+    [SerializeField] private AudioClip win;
+    [SerializeField] private AudioClip wrong;
 
+    private AudioSource audioSource;
     int num;
     int[] inferior;
     int[] superior;
     string respuestaCorrecta = "";
+
+    private void Awake()
+    {
+        audioSource = GetComponent<AudioSource>();
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -107,7 +115,20 @@ public class juego2 : MonoBehaviour
 
     public void PresionarBoton(TextMeshProUGUI textoBoton)
     {
-        if (textoBoton.text == respuestaCorrecta) Debug.Log("Respuesta Correcta");
-        else Debug.Log("Respuesta Incorrecta");
+        if (textoBoton.text == respuestaCorrecta)
+        {
+            Debug.Log("Respuesta correcta");
+            audioSource.clip = win;
+            audioSource.Play();
+            //SceneManager.LoadScene(0);
+        }
+
+        else
+        {
+            Debug.Log("Respuesta incorrecta");
+            audioSource.clip = wrong;
+            audioSource.Play();
+            //SceneManager.LoadScene(0);
+        }
     }
 }

@@ -11,12 +11,20 @@ public class Juego5 : MonoBehaviour
     [SerializeField] private GameObject[] manzanasT; //las manzanas tachadas
     [SerializeField] private TextMeshProUGUI[] textoBotones;
     [SerializeField] private TextMeshProUGUI resta;
+    [SerializeField] private AudioClip win;
+    [SerializeField] private AudioClip wrong;
 
+    private AudioSource audioSource;
     private int[] respuestas = new int[5];
     private int numManzanas;
     private int numManzanasT;
     private int totalManzanas; 
     private int respuestaCorrecta;
+
+    private void Awake()
+    {
+        audioSource = GetComponent<AudioSource>();
+    }
 
     private void Start()
     {
@@ -78,8 +86,21 @@ public class Juego5 : MonoBehaviour
         {
             if (texto == textoBotones[i])
             {
-                if (respuestas[i] == respuestaCorrecta) Debug.Log("Respuesta Correcta");
-                else Debug.Log("Respuesta Incorrecta");
+                if (respuestas[i] == respuestaCorrecta)
+                {
+                    Debug.Log("Respuesta correcta");
+                    audioSource.clip = win;
+                    audioSource.Play();
+                    //SceneManager.LoadScene(0);
+                }
+
+                else
+                {
+                    Debug.Log("Respuesta incorrecta");
+                    audioSource.clip = wrong;
+                    audioSource.Play();
+                    //SceneManager.LoadScene(0);
+                }
 
                 return;
             }

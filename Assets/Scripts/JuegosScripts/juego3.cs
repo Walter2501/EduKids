@@ -9,8 +9,16 @@ public class juego3 : MonoBehaviour
 {
     public TextMeshProUGUI txtPrin;
     public TextMeshProUGUI[] txtRpt;
+    [SerializeField] private AudioClip win;
+    [SerializeField] private AudioClip wrong;
 
+    private AudioSource audioSource;
     private string respuestaCorrecta = "";
+
+    private void Awake()
+    {
+        audioSource = GetComponent<AudioSource>();
+    }
 
     void Start()
     {
@@ -79,7 +87,20 @@ public class juego3 : MonoBehaviour
 
     public void PresionarBoton(TextMeshProUGUI textoBoton)
     {
-        if (textoBoton.text == respuestaCorrecta) Debug.Log("Respuesta Correcta");
-        else Debug.Log("Respuesta Incorrecta");
+        if (textoBoton.text == respuestaCorrecta)
+        {
+            Debug.Log("Respuesta correcta");
+            audioSource.clip = win;
+            audioSource.Play();
+            //SceneManager.LoadScene(0);
+        }
+
+        else
+        {
+            Debug.Log("Respuesta incorrecta");
+            audioSource.clip = wrong;
+            audioSource.Play();
+            //SceneManager.LoadScene(0);
+        }
     }
 }

@@ -2,21 +2,25 @@ using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class Juego1 : MonoBehaviour
 {
     [SerializeField] private GameObject[] Manzanas;
     [SerializeField] private TextMeshProUGUI[] textosBotones;
+    [SerializeField] private AudioClip win;
+    [SerializeField] private AudioClip wrong;
 
+    private AudioSource audioSource;
     private int[] numeros = new int[6];
     private int cantidadAleatoria = 0; //tambien la respuesta correcta
 
     private void Awake()
     {
         cantidadAleatoria = Random.Range(1, 11);
-
-        for(int i = 0; i < cantidadAleatoria; i++)
+        audioSource = GetComponent<AudioSource>();
+        for (int i = 0; i < cantidadAleatoria; i++)
         {
             Manzanas[i].SetActive(true);
         }
@@ -66,8 +70,22 @@ public class Juego1 : MonoBehaviour
         {
             if (textosBotones[i] == texto)
             {
-                if (numeros[i] == cantidadAleatoria) Debug.Log("Respuesta correcta");
-                else Debug.Log("Respuesta incorrecta");
+                if (numeros[i] == cantidadAleatoria)
+                {
+                    Debug.Log("Respuesta correcta");
+                    audioSource.clip = win;
+                    audioSource.Play();
+                    //SceneManager.LoadScene(0);
+                }
+
+                else
+                {
+                    Debug.Log("Respuesta incorrecta");
+                    audioSource.clip = wrong;
+                    audioSource.Play();
+                    //SceneManager.LoadScene(0);
+                }
+
                 return;
             }
         }

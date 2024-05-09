@@ -10,9 +10,17 @@ public class JuegoFiguras : MonoBehaviour
     [SerializeField] private FigurasGeometricas[] figuras;
     [SerializeField] private TextMeshProUGUI[] textosBotones;
     [SerializeField] private Image figuraImg;
+    [SerializeField] private AudioClip win;
+    [SerializeField] private AudioClip wrong;
 
+    private AudioSource audioSource;
     private string ladosCorrectos = "";
     private FigurasGeometricas figuraElegida;
+
+    private void Awake()
+    {
+        audioSource = GetComponent<AudioSource>();
+    }
 
     private void Start()
     {
@@ -46,7 +54,20 @@ public class JuegoFiguras : MonoBehaviour
 
     public void PresionarBoton(TextMeshProUGUI texto)
     {
-        if (texto.text == ladosCorrectos) Debug.Log("Respuesta Correcta");
-        else Debug.Log("Respuesta incorrecta");
+        if (texto.text == ladosCorrectos)
+        {
+            Debug.Log("Respuesta correcta");
+            audioSource.clip = win;
+            audioSource.Play();
+            //SceneManager.LoadScene(0);
+        }
+
+        else
+        {
+            Debug.Log("Respuesta incorrecta");
+            audioSource.clip = wrong;
+            audioSource.Play();
+            //SceneManager.LoadScene(0);
+        }
     }
 }
