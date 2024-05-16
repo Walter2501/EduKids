@@ -1,8 +1,8 @@
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class Juego1 : MonoBehaviour
@@ -11,25 +11,42 @@ public class Juego1 : MonoBehaviour
     [SerializeField] private TextMeshProUGUI[] textosBotones;
     [SerializeField] private AudioClip win;
     [SerializeField] private AudioClip wrong;
+    [SerializeField] private int puntosPorRespuestaCorrecta;
 
+    private int puntosTotales = 0;
+    private int vecesJugado = 1;
+    private bool enEspera = false;
     private AudioSource audioSource;
     private int[] numeros = new int[6];
     private int cantidadAleatoria = 0; //tambien la respuesta correcta
 
     private void Awake()
     {
-        cantidadAleatoria = Random.Range(1, 11);
         audioSource = GetComponent<AudioSource>();
-        for (int i = 0; i < cantidadAleatoria; i++)
-        {
-            Manzanas[i].SetActive(true);
-        }
     }
 
     private void Start()
     {
+        IniciarJuego();
+    }
+
+    private void IniciarJuego()
+    {
+        cantidadAleatoria = Random.Range(1, 11);
+        EncenderManzanas(cantidadAleatoria);
         GenerarNumeros();
         AsignarNumeros();
+        enEspera = false;
+    }
+
+    private void EncenderManzanas(int cantidad)
+    {
+        
+        for (int i = 0; i < Manzanas.Length; i++)
+        {
+            if (i < cantidadAleatoria) Manzanas[i].SetActive(true);
+            else Manzanas[i].SetActive(false);
+        }
     }
 
     private void GenerarNumeros()
@@ -66,28 +83,46 @@ public class Juego1 : MonoBehaviour
 
     public void BotonRespuestaCorrecta(TextMeshProUGUI texto)
     {
+        if (enEspera) return;
         for (int i = 0; i < textosBotones.Length; i++)
         {
             if (textosBotones[i] == texto)
             {
                 if (numeros[i] == cantidadAleatoria)
                 {
-                    Debug.Log("Respuesta correcta");
                     audioSource.clip = win;
                     audioSource.Play();
+                    puntosTotales += puntosPorRespuestaCorrecta;
                     //SceneManager.LoadScene(0);
                 }
 
                 else
                 {
-                    Debug.Log("Respuesta incorrecta");
                     audioSource.clip = wrong;
                     audioSource.Play();
                     //SceneManager.LoadScene(0);
                 }
-
+                enEspera = true;
+                vecesJugado++;
+                if (vecesJugado > 5)
+                {
+                    StartCoroutine(TerminarJuego());
+                }
+                else
+                {
+                    Invoke("IniciarJuego", 1f);
+                }
                 return;
             }
         }
+    }
+
+    private IEnumerator TerminarJuego()
+    {
+        GameManager.Instance.AddMeritos(puntosTotales);
+        Debug.Log($"Terminado: {GameManager.Instance.cantidadMeritos}");
+        yield return new WaitForSeconds(1);
+        Debug.Log(puntosTotales);
+        GameManager.Instance.CambiarEscena(0);
     }
 }
