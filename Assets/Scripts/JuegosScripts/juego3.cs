@@ -11,7 +11,11 @@ public class juego3 : MonoBehaviour
     public TextMeshProUGUI[] txtRpt;
     [SerializeField] private AudioClip win;
     [SerializeField] private AudioClip wrong;
+    [SerializeField] private int puntosPorRespuestaCorrecta;
 
+    private int puntosTotales = 0;
+    private int vecesJugado = 1;
+    private bool enEspera = false;
     private AudioSource audioSource;
     private string respuestaCorrecta = "";
 
@@ -71,6 +75,7 @@ public class juego3 : MonoBehaviour
 
             txtRpt[availableIndexes[i]].text = $"{numAle1 + numAle2}";
         }
+        enEspera = false;
     }
 
     // Método Shuffle() para mezclar una lista
@@ -87,20 +92,36 @@ public class juego3 : MonoBehaviour
 
     public void PresionarBoton(TextMeshProUGUI textoBoton)
     {
+        if (enEspera) return;
         if (textoBoton.text == respuestaCorrecta)
         {
-            Debug.Log("Respuesta correcta");
             audioSource.clip = win;
             audioSource.Play();
-            //SceneManager.LoadScene(0);
+            puntosTotales += puntosPorRespuestaCorrecta;
         }
-
         else
         {
-            Debug.Log("Respuesta incorrecta");
             audioSource.clip = wrong;
             audioSource.Play();
-            //SceneManager.LoadScene(0);
         }
+        enEspera = true;
+        vecesJugado++;
+        if (vecesJugado > 5)
+        {
+            StartCoroutine(TerminarJuego());
+        }
+        else
+        {
+            Invoke("calcularSuma", 1f);
+        }
+    }
+
+    private IEnumerator TerminarJuego()
+    {
+        GameManager.Instance.AddMeritos(puntosTotales);
+        Debug.Log($"Terminado: {GameManager.Instance.cantidadMeritos}");
+        yield return new WaitForSeconds(1);
+        Debug.Log(puntosTotales);
+        GameManager.Instance.CambiarEscena(0);
     }
 }

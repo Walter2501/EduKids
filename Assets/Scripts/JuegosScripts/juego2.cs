@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using System.Collections;
 
 public class juego2 : MonoBehaviour
 {
@@ -8,7 +9,11 @@ public class juego2 : MonoBehaviour
     public TextMeshProUGUI[] textRptIArray;
     [SerializeField] private AudioClip win;
     [SerializeField] private AudioClip wrong;
+    [SerializeField] private int puntosPorRespuestaCorrecta;
 
+    private int puntosTotales = 0;
+    private int vecesJugado = 1;
+    private bool enEspera = false;
     private AudioSource audioSource;
     int num;
     int[] inferior;
@@ -20,16 +25,9 @@ public class juego2 : MonoBehaviour
         audioSource = GetComponent<AudioSource>();
     }
 
-    // Start is called before the first frame update
     void Start()
     {
         calcularNum();
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
     }
 
 
@@ -73,13 +71,14 @@ public class juego2 : MonoBehaviour
         {
             textRptIArray[availableIndexes[j - 1]].text = $"{inferior[j]} | {superior[j]}";
         }
+        enEspera = false;
     }
 
     public void generarRespuestas(int numero)
     {
         // Respuesta correcta
         int respuestaCorrectaInf = Mathf.Max(numero - 1, 0);
-        int respuestaCorrectaSup = Mathf.Min(numero + 1, 9);
+        int respuestaCorrectaSup = Mathf.Min(numero + 1, 10);
 
         // Respuestas incorrectas
         List<int> respuestasIncorrectas = new List<int>();
@@ -115,20 +114,39 @@ public class juego2 : MonoBehaviour
 
     public void PresionarBoton(TextMeshProUGUI textoBoton)
     {
+        if (enEspera) return;
+
         if (textoBoton.text == respuestaCorrecta)
         {
-            Debug.Log("Respuesta correcta");
             audioSource.clip = win;
             audioSource.Play();
-            //SceneManager.LoadScene(0);
+            puntosTotales += puntosPorRespuestaCorrecta;
         }
 
         else
         {
-            Debug.Log("Respuesta incorrecta");
             audioSource.clip = wrong;
             audioSource.Play();
-            //SceneManager.LoadScene(0);
         }
+        enEspera = true;
+        vecesJugado++;
+        if (vecesJugado > 5)
+        {
+            StartCoroutine(TerminarJuego());
+        }
+        else
+        {
+            Invoke("calcularNum", 1f);
+        }
+        return;
+    }
+
+    private IEnumerator TerminarJuego()
+    {
+        GameManager.Instance.AddMeritos(puntosTotales);
+        Debug.Log($"Terminado: {GameManager.Instance.cantidadMeritos}");
+        yield return new WaitForSeconds(1);
+        Debug.Log(puntosTotales);
+        GameManager.Instance.CambiarEscena(0);
     }
 }

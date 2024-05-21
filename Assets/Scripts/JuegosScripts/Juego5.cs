@@ -13,7 +13,11 @@ public class Juego5 : MonoBehaviour
     [SerializeField] private TextMeshProUGUI resta;
     [SerializeField] private AudioClip win;
     [SerializeField] private AudioClip wrong;
+    [SerializeField] private int puntosPorRespuestaCorrecta;
 
+    private int puntosTotales = 0;
+    private int vecesJugado = 1;
+    private bool enEspera = false;
     private AudioSource audioSource;
     private int[] respuestas = new int[5];
     private int numManzanas;
@@ -28,10 +32,16 @@ public class Juego5 : MonoBehaviour
 
     private void Start()
     {
+        IniciarJuego();
+    }
+
+    private void IniciarJuego()
+    {
         DecidirManzanasParaUsar();
         EncenderManzanas();
         GeneracionRespuestas();
         Escritura();
+        enEspera = false;
     }
 
     private void DecidirManzanasParaUsar()
@@ -44,6 +54,11 @@ public class Juego5 : MonoBehaviour
 
     private void EncenderManzanas() // encenderá las manzanas
     {
+        for (int i = 0; i < manzanas.Length; i++)
+        {
+            manzanas[i].SetActive(false);
+            manzanasT[i].SetActive(false);
+        }
         for (int i = 0; i < numManzanas; i++)
         {
             manzanas[i].SetActive(true);
@@ -82,28 +97,44 @@ public class Juego5 : MonoBehaviour
 
     public void PresionarBoton(TextMeshProUGUI texto)
     {
+        if (enEspera) return;
         for (int i = 0; i < textoBotones.Length; i++)
         {
             if (texto == textoBotones[i])
             {
                 if (respuestas[i] == respuestaCorrecta)
                 {
-                    Debug.Log("Respuesta correcta");
                     audioSource.clip = win;
                     audioSource.Play();
-                    //SceneManager.LoadScene(0);
+                    puntosTotales += puntosPorRespuestaCorrecta;
                 }
 
                 else
                 {
-                    Debug.Log("Respuesta incorrecta");
                     audioSource.clip = wrong;
                     audioSource.Play();
-                    //SceneManager.LoadScene(0);
                 }
-
+                enEspera = true;
+                vecesJugado++;
+                if (vecesJugado > 5)
+                {
+                    StartCoroutine(TerminarJuego());
+                }
+                else
+                {
+                    Invoke("IniciarJuego", 1f);
+                }
                 return;
             }
         }
+    }
+
+    private IEnumerator TerminarJuego()
+    {
+        GameManager.Instance.AddMeritos(puntosTotales);
+        Debug.Log($"Terminado: {GameManager.Instance.cantidadMeritos}");
+        yield return new WaitForSeconds(1);
+        Debug.Log(puntosTotales);
+        GameManager.Instance.CambiarEscena(0);
     }
 }

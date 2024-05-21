@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
@@ -11,7 +12,11 @@ public class JuegoReloj : MonoBehaviour
     [SerializeField] private Image relojImg;
     [SerializeField] private AudioClip win;
     [SerializeField] private AudioClip wrong;
+    [SerializeField] private int puntosPorRespuestaCorrecta;
 
+    private int puntosTotales = 0;
+    private int vecesJugado = 1;
+    private bool enEspera = false;
     private AudioSource audioSource;
     private Reloj relojElegido;
     private string[][] horas_minutos =
@@ -30,12 +35,18 @@ public class JuegoReloj : MonoBehaviour
 
     private void Start()
     {
+        IniciarJuego();
+    }
+
+    private void IniciarJuego()
+    {
         relojElegido = relojsSO[Random.Range(0, relojsSO.Length)];
 
         relojImg.sprite = relojElegido.RelojImg;
         horaCorrecta = relojElegido.Hora;
 
         GenerarHoras();
+        enEspera = false;
     }
 
     private void GenerarHoras()
@@ -70,20 +81,39 @@ public class JuegoReloj : MonoBehaviour
 
     public void PresionarBoton(TextMeshProUGUI textoBoton)
     {
+        if (enEspera) return;
+
         if (textoBoton.text == horaCorrecta)
         {
-            Debug.Log("Respuesta correcta");
             audioSource.clip = win;
             audioSource.Play();
-            //SceneManager.LoadScene(0);
+            puntosTotales += puntosPorRespuestaCorrecta;
         }
-
         else
         {
-            Debug.Log("Respuesta incorrecta");
             audioSource.clip = wrong;
             audioSource.Play();
-            //SceneManager.LoadScene(0);
         }
+
+        enEspera = true;
+        vecesJugado++;
+        if (vecesJugado > 5)
+        {
+            StartCoroutine(TerminarJuego());
+        }
+        else
+        {
+            Invoke("IniciarJuego", 1f);
+        }
+        return;
+    }
+
+    private IEnumerator TerminarJuego()
+    {
+        GameManager.Instance.AddMeritos(puntosTotales);
+        Debug.Log($"Terminado: {GameManager.Instance.cantidadMeritos}");
+        yield return new WaitForSeconds(1);
+        Debug.Log(puntosTotales);
+        GameManager.Instance.CambiarEscena(0);
     }
 }

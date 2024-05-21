@@ -12,7 +12,11 @@ public class JuegoFiguras : MonoBehaviour
     [SerializeField] private Image figuraImg;
     [SerializeField] private AudioClip win;
     [SerializeField] private AudioClip wrong;
+    [SerializeField] private int puntosPorRespuestaCorrecta;
 
+    private int puntosTotales = 0;
+    private int vecesJugado = 1;
+    private bool enEspera = false;
     private AudioSource audioSource;
     private string ladosCorrectos = "";
     private FigurasGeometricas figuraElegida;
@@ -23,6 +27,11 @@ public class JuegoFiguras : MonoBehaviour
     }
 
     private void Start()
+    {
+        ElegirFiguras();
+    }
+
+    private void ElegirFiguras()
     {
         figuraElegida = figuras[Random.Range(0, figuras.Length)];
         figuraImg.sprite = figuraElegida.FiguraImg;
@@ -50,24 +59,43 @@ public class JuegoFiguras : MonoBehaviour
         }
 
         textosBotones[Random.Range(0, textosBotones.Length)].text = ladosCorrectos;
+
+        enEspera = false;
     }
 
     public void PresionarBoton(TextMeshProUGUI texto)
     {
+        if (enEspera) return;
         if (texto.text == ladosCorrectos)
         {
-            Debug.Log("Respuesta correcta");
             audioSource.clip = win;
             audioSource.Play();
-            //SceneManager.LoadScene(0);
+            puntosTotales += puntosPorRespuestaCorrecta;
         }
 
         else
         {
-            Debug.Log("Respuesta incorrecta");
             audioSource.clip = wrong;
             audioSource.Play();
-            //SceneManager.LoadScene(0);
         }
+        enEspera = true;
+        vecesJugado++;
+        if (vecesJugado > 5)
+        {
+            StartCoroutine(TerminarJuego());
+        }
+        else
+        {
+            Invoke("ElegirFiguras", 1f);
+        }
+    }
+
+    private IEnumerator TerminarJuego()
+    {
+        GameManager.Instance.AddMeritos(puntosTotales);
+        Debug.Log($"Terminado: {GameManager.Instance.cantidadMeritos}");
+        yield return new WaitForSeconds(1);
+        Debug.Log(puntosTotales);
+        GameManager.Instance.CambiarEscena(0);
     }
 }

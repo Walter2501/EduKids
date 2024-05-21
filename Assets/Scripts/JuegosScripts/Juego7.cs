@@ -10,7 +10,11 @@ public class Juego7 : MonoBehaviour
     [SerializeField] private TextMeshProUGUI textoSuma;
     [SerializeField] private AudioClip win;
     [SerializeField] private AudioClip wrong;
+    [SerializeField] private int puntosPorRespuestaCorrecta;
 
+    private int puntosTotales = 0;
+    private int vecesJugado = 1;
+    private bool enEspera = false;
     private AudioSource audioSource;
     private int num1 = 0;
     private int num2 = 0;
@@ -23,6 +27,11 @@ public class Juego7 : MonoBehaviour
 
     private void Start()
     {
+        IniciarJuego();
+    }
+
+    private void IniciarJuego()
+    {
         num1 = Random.Range(0, 10);
         num2 = Random.Range(0, 10);
         suma = num1 + num2;
@@ -30,6 +39,7 @@ public class Juego7 : MonoBehaviour
         textoSuma.text = $"{num1} + {num2}";
 
         GenerarRespuestas();
+        enEspera = false;
     }
 
     private void GenerarRespuestas()
@@ -51,20 +61,40 @@ public class Juego7 : MonoBehaviour
 
     public void PresionarBoton(TextMeshProUGUI texto)
     {
+        if (enEspera) return;
+
         if (texto.text == $"{suma}")
         {
-            Debug.Log("Respuesta correcta");
             audioSource.clip = win;
             audioSource.Play();
-            //SceneManager.LoadScene(0);
+            puntosTotales += puntosPorRespuestaCorrecta;
         }
 
         else
         {
-            Debug.Log("Respuesta incorrecta");
             audioSource.clip = wrong;
             audioSource.Play();
-            //SceneManager.LoadScene(0);
         }
+
+        enEspera = true;
+        vecesJugado++;
+        if (vecesJugado > 5)
+        {
+            StartCoroutine(TerminarJuego());
+        }
+        else
+        {
+            Invoke("IniciarJuego", 1f);
+        }
+        return;
+    }
+
+    private IEnumerator TerminarJuego()
+    {
+        GameManager.Instance.AddMeritos(puntosTotales);
+        Debug.Log($"Terminado: {GameManager.Instance.cantidadMeritos}");
+        yield return new WaitForSeconds(1);
+        Debug.Log(puntosTotales);
+        GameManager.Instance.CambiarEscena(0);
     }
 }

@@ -93,14 +93,12 @@ public class Juego1 : MonoBehaviour
                     audioSource.clip = win;
                     audioSource.Play();
                     puntosTotales += puntosPorRespuestaCorrecta;
-                    //SceneManager.LoadScene(0);
                 }
 
                 else
                 {
                     audioSource.clip = wrong;
                     audioSource.Play();
-                    //SceneManager.LoadScene(0);
                 }
                 enEspera = true;
                 vecesJugado++;

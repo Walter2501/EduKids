@@ -757,6 +757,7 @@ MonoBehaviour:
   - {fileID: 17339224}
   win: {fileID: 8300000, guid: ef65d96bacb387d43bb63b4b96daafcb, type: 3}
   wrong: {fileID: 8300000, guid: de89b0927e4a46843a857300081383a0, type: 3}
+  puntosPorRespuestaCorrecta: 20
 --- !u!82 &230150623
 AudioSource:
   m_ObjectHideFlags: 0
