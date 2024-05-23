@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class BotonJuego : MonoBehaviour
 {
-    [SerializeField] private int escanaCargar;
+    [SerializeField] private string escenaCargar;
     [SerializeField] private Image imagen;
     [SerializeField] private string nombre;
 
@@ -23,6 +23,6 @@ public class BotonJuego : MonoBehaviour
 
     public void CargarBoton()
     {
-        SceneManager.LoadScene(escanaCargar);
+        GameManager.Instance.CambiarEscena(escenaCargar);
     }
 }

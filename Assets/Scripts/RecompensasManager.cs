@@ -5,46 +5,28 @@ using Newtonsoft.Json;
 
 public static class RecompensasManager
 {
-    private const string GameObjectsDataKey = "GameObjectsData";
+    private const string RecompensasDataKey = "RecompensasData";
 
-    public static void SaveGameObjects(List<GameObject> objectsToSave)
+    public static void SaveRecompensas(List<RecompensaData> recompensasToSave)
     {
-        List<GameObjectData> dataList = new List<GameObjectData>();
-        foreach (GameObject obj in objectsToSave)
+        List<RecompensaData> recompensasList = new List<RecompensaData>();
+        foreach (RecompensaData obj in recompensasToSave)
         {
-            dataList.Add(new GameObjectData(obj));
+            recompensasList.Add(obj);
         }
 
-        string json = JsonConvert.SerializeObject(dataList);
-        PlayerPrefs.SetString(GameObjectsDataKey, json);
+        string json = JsonConvert.SerializeObject(recompensasList);
+        PlayerPrefs.SetString(RecompensasDataKey, json);
         PlayerPrefs.Save();
     }
 
-    public static List<GameObjectData> LoadGameObjects()
+    public static List<RecompensaData> LoadRecompensas()
     {
-        string json = PlayerPrefs.GetString(GameObjectsDataKey, "");
+        string json = PlayerPrefs.GetString(RecompensasDataKey, "");
         if (!string.IsNullOrEmpty(json))
         {
-            return JsonConvert.DeserializeObject<List<GameObjectData>>(json);
+            return JsonConvert.DeserializeObject<List<RecompensaData>>(json);
         }
-        return new List<GameObjectData>();
-    }
-}
-
-[System.Serializable]
-public class GameObjectData
-{
-    public string name;
-    public List<float> position;
-
-    public GameObjectData(GameObject obj)
-    {
-        name = obj.name;
-        position = new List<float>
-        {
-            obj.transform.position.x,
-            obj.transform.position.y,
-            obj.transform.position.z
-        };
+        return new List<RecompensaData>();
     }
 }
