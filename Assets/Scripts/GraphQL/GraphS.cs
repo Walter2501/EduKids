@@ -11,7 +11,7 @@ public class GraphS
 
 
 
-    //Recibo el url de mi api, el endpoint es la url recibida
+    //Establesco la conexión con mi api
     public GraphS()
     {
         _client = new GraphQLHttpClient(endpoint, new NewtonsoftJsonSerializer());
@@ -26,8 +26,24 @@ public class GraphS
         {
             foreach (var error in response.Errors)
             {
-                // Log error or handle it accordingly
+
                 Debug.LogError(error.Message);
+            }
+            return null;
+        }
+        return response.Data;
+    }
+
+    //Creo una mutación esto sirve para hacer crear,eliminar,editar valores en la bd, también me regresa algo de data si la mutacion lo necesitará 
+    public async Task<dynamic> ExecuteMutationAsync(GraphQLRequest request)
+    {
+        var response = await _client.SendMutationAsync<dynamic>(request).ConfigureAwait(false);
+        if (response.Errors != null)
+        {
+            foreach (var error in response.Errors)
+            {
+
+                UnityEngine.Debug.LogError(error.Message);
             }
             return null;
         }
@@ -39,5 +55,11 @@ public class GraphS
     public async Task<dynamic> ExecuteCustomQuery(GraphQLRequest query)
     {
         return await ExecuteQueryAsync(query).ConfigureAwait(false);
+    }
+
+    //manejo mi mutacion personalizada y se la paso a mi metodo ExecuteMutationAsync, para funcionar necesito una GraphQLRequest mutation y retorno la respuesta 
+    public async Task<dynamic> ExecuteCustomMutation(GraphQLRequest mutation)
+    {
+        return await ExecuteMutationAsync(mutation).ConfigureAwait(false);
     }
 }
