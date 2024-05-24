@@ -5,14 +5,13 @@ using UnityEngine;
 
 public class prueba : MonoBehaviour
 {
-    private static readonly string endpoint = "https://countries.trevorblades.com/"; //le paso una url estatica de mi api
     private GraphS _graphQLService; //instancia mi clase GraphS para obtener mis dos metodos 
     public TextMeshProUGUI resultText; // Referencia al objeto Text en la UI
 
 
     void Start()
     {
-        _graphQLService = new GraphS(endpoint);
+        _graphQLService = new GraphS();
         FetchData().ConfigureAwait(false);
     }
 

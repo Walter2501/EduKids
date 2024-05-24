@@ -7,9 +7,12 @@ public class GraphS
 {
     private readonly GraphQLHttpClient _client;
 
+    private static readonly string endpoint = "https://countries.trevorblades.com/"; //le paso una url estatica de mi api
+
+
 
     //Recibo el url de mi api, el endpoint es la url recibida
-    public GraphS(string endpoint)
+    public GraphS()
     {
         _client = new GraphQLHttpClient(endpoint, new NewtonsoftJsonSerializer());
     }
