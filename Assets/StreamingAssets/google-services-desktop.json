@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "448717380787",
+    "firebase_url": "https://edukids-10a99-default-rtdb.firebaseio.com",
+    "project_id": "edukids-10a99",
+    "storage_bucket": "edukids-10a99.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:448717380787:android:7216da20e729122cb864c6",
+        "android_client_info": {
+          "package_name": "com.Grupo2PT.EduKids"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBVxuadItgtBZye0JVPLQnNitL7D67L8p4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
