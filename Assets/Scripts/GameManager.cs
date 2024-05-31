@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 using UnityEngine;
+using Firebase.Database;
 
 public class GameManager : MonoBehaviour
 {
@@ -20,27 +21,32 @@ public class GameManager : MonoBehaviour
     }
     #endregion
 
-    public int cantidadMeritos => PlayerPrefs.GetInt(MERITOS_KEY);
-    private string MERITOS_KEY = "meritos_password";
+    public string usuarioID => PlayerPrefs.GetString(USUARIOID_KEY, "");
+    private string USUARIOID_KEY = "usuarioID_Key";
 
-    public int rol => PlayerPrefs.GetInt(ROL_KEY, -1); //0 es estudiante - 1 es maestro
+    public int rol => PlayerPrefs.GetInt(ROL_KEY, -1);
     private string ROL_KEY = "rol_password";
 
-    public string nombre => PlayerPrefs.GetString(NOMBRE_KEY, "");
-    private string NOMBRE_KEY = "nombre_password";
+    public DatabaseReference database;
 
-    public string apellido => PlayerPrefs.GetString(APELLIDO_KEY, "");
-    private string APELLIDO_KEY = "apellido_password";
+    public Estudiante estudiante = null; //solo se llenara el del rol, los demás se quedaran vacios
+    public Maestro maestro = null;
+
+    public int cantidadMeritos;
+    public string nombre;
+    public string apellido;
 
     private void Awake()
     {
         instance = this;
+        database = FirebaseDatabase.DefaultInstance.RootReference;
         DontDestroyOnLoad(this.gameObject);
     }
 
     private void Start()
     {
-        Debug.Log($"meritos: {cantidadMeritos} - Nombre: {nombre} - Apellido: {apellido} - Rol: {rol}");
+        Debug.Log($"Id: {usuarioID}");
+        Debug.Log($"rol: {rol}");
     }
 
     private void Update()
@@ -48,34 +54,28 @@ public class GameManager : MonoBehaviour
 #if UNITY_EDITOR
         if (Input.GetKeyDown(KeyCode.F10))
         {
-            PlayerPrefs.SetInt(MERITOS_KEY, 0);
-            PlayerPrefs.SetInt(ROL_KEY, -1);
-            PlayerPrefs.SetString(NOMBRE_KEY, "");
-            PlayerPrefs.SetString(APELLIDO_KEY, "");
-            PlayerPrefs.Save();
+            PlayerPrefs.DeleteKey(USUARIOID_KEY);
+            PlayerPrefs.DeleteKey(ROL_KEY);
         }
 #endif
     }
 
     public void AddMeritos(int cantidad_to_add)
     {
-        int nuevaCantidad = cantidadMeritos + cantidad_to_add;
-        PlayerPrefs.SetInt(MERITOS_KEY, nuevaCantidad);
+
+    }
+
+    public void SetUserID(string newID)
+    {
+        PlayerPrefs.SetString(USUARIOID_KEY, newID);
         PlayerPrefs.Save();
     }
 
-    public void SetRol(int rolNumber)
+    public void SetRol(int newRol)
     {
-        if (rol != -1) return;
-        PlayerPrefs.SetInt(ROL_KEY, rolNumber);
+        PlayerPrefs.SetInt(ROL_KEY, newRol);
         PlayerPrefs.Save();
-    }
-
-    public void SetNombreApellido(string newNombre, string newApellido)
-    {
-        PlayerPrefs.SetString(NOMBRE_KEY, newNombre);
-        PlayerPrefs.SetString(APELLIDO_KEY, newApellido);
-        PlayerPrefs.Save();
+        //rol seteado
     }
 
     public void CambiarEscena(int IdEscena)
