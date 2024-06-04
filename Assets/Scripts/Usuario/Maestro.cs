@@ -13,6 +13,6 @@ public class Maestro : UsuarioBase
     {
         Recompensas = new List<RecompensaData>();
         Canjeos = new List<CanjeoData>();
-        Rol = 1;
+        Rol = 2;
     }
 }

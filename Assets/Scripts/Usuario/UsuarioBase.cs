@@ -5,8 +5,8 @@ using UnityEngine;
 
 //Roles:
 //0 = Estudiante
-//1 = Maestro
-//2 = Padre
+//1 = Padre
+//2 = Maestro
 //3 = Admin
 [Serializable]
 public class UsuarioBase
@@ -17,6 +17,7 @@ public class UsuarioBase
     public string Password;
     public int Rol;
 
+    public UsuarioBase() { }
     public UsuarioBase(string nombre, string apellido1, string apellido2, string password)
     {
         Nombre = nombre;
