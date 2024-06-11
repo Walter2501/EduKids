@@ -4,20 +4,17 @@ using UnityEngine;
 
 public class BotonEliminarRecompensa : MonoBehaviour
 {
-    public recompensas panel;
+    public RecompensaManager panel;
 
     private void Start()
     {
-        panel = GameObject.Find("Panel").GetComponent<recompensas>();
+        panel = GameObject.Find("Canvas").GetComponent<RecompensaManager>();
     }
 
     public void EliminarRecompensa(GameObject obj)
     {
-        if (!panel.EliminarRecompensa(obj))
-        {
-            Debug.Log("No existe");
-            return;
-        }
-        Destroy(obj);
+        if (panel.Cargando) return;
+
+        panel.EliminarRecompensa(obj);
     }
 }

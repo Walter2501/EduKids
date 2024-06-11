@@ -24,12 +24,21 @@ public class GameManager : MonoBehaviour
     public string usuarioID => PlayerPrefs.GetString(USUARIOID_KEY, "");
     private string USUARIOID_KEY = "usuarioID_Key";
 
+    //solo se usa si es estudiante:
+    public string maestroID => PlayerPrefs.GetString(MAESTROID_KEY, "");
+    private string MAESTROID_KEY = "maestroID_Key";
+
+    //solo se usa si es padre:
+    public string estudianteID => PlayerPrefs.GetString(ESTUDIANTEID_KEY, "");
+    private string ESTUDIANTEID_KEY = "estudianteID_Key";
+
+
     public int rol => PlayerPrefs.GetInt(ROL_KEY, -1);
     private string ROL_KEY = "rol_password";
 
     public DatabaseReference database;
 
-    public Estudiante estudiante = null; //solo se llenara el del rol, los demás se quedaran vacios
+    public Estudiante estudiante = null; //solo se llenara el del rol, los demï¿½s se quedaran vacios
     public Maestro maestro = null;
 
     public int cantidadMeritos;
@@ -45,8 +54,7 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        Debug.Log($"Id: {usuarioID}");
-        Debug.Log($"rol: {rol}");
+        Debug.Log($"Id: {usuarioID} - rol: {rol}");
     }
 
     private void Update()
@@ -56,6 +64,11 @@ public class GameManager : MonoBehaviour
         {
             PlayerPrefs.DeleteKey(USUARIOID_KEY);
             PlayerPrefs.DeleteKey(ROL_KEY);
+        }
+        if (Input.GetKeyDown(KeyCode.F11))
+        {
+            if (maestro != null) Debug.Log($"maestro existe: {maestro}");
+            else Debug.Log($"maestro no existe");
         }
 #endif
     }
@@ -86,5 +99,10 @@ public class GameManager : MonoBehaviour
     public void CambiarEscena(string NombreEscena)
     {
         SceneManager.LoadScene(NombreEscena);
+    }
+
+    public void ReiniciarEscenaActual()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 }

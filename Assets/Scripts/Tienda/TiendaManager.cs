@@ -9,7 +9,7 @@ public class TiendaManager : MonoBehaviour
     [SerializeField] private Transform container;
     [SerializeField] private TextMeshProUGUI meritos;
 
-    private List<RecompensaData> recompensasList => RecompensasManager.LoadRecompensas();
+    private List<RecompensaData> recompensasList;
 
     private void Start()
     {
