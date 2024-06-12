@@ -269,6 +269,7 @@ GameObject:
   - component: {fileID: 253373883}
   - component: {fileID: 253373882}
   - component: {fileID: 253373881}
+  - component: {fileID: 253373885}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -359,6 +360,22 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &253373885
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 253373880}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1925e7c65f6e4714f8b87d80f99183ad, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nombreText: {fileID: 770563175}
+  crearRecompensas: {fileID: 1471790806}
+  canjeos: {fileID: 1177565275}
+  gestionAlumnos: {fileID: 1845955168}
 --- !u!1 &300233880
 GameObject:
   m_ObjectHideFlags: 0
@@ -370,7 +387,6 @@ GameObject:
   - component: {fileID: 300233881}
   - component: {fileID: 300233883}
   - component: {fileID: 300233882}
-  - component: {fileID: 300233884}
   m_Layer: 5
   m_Name: Panel
   m_TagString: Untagged
@@ -437,20 +453,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 300233880}
   m_CullTransparentMesh: 1
---- !u!114 &300233884
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 300233880}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5d7002b8fbf0d9e40ac738731784de95, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  meritosText: {fileID: 0}
-  nombreText: {fileID: 770563175}
 --- !u!1 &330793761
 GameObject:
   m_ObjectHideFlags: 0
@@ -1128,7 +1130,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 300233884}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: MenuScript, Assembly-CSharp
         m_MethodName: CambiarEscena
         m_Mode: 5
@@ -1395,7 +1397,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 300233884}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: MenuScript, Assembly-CSharp
         m_MethodName: CambiarEscena
         m_Mode: 5
@@ -1528,7 +1530,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 300233884}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: MenuScript, Assembly-CSharp
         m_MethodName: CambiarEscena
         m_Mode: 5

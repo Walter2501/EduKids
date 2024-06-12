@@ -1,7 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 
 //Roles:
 //0 = Estudiante
@@ -17,7 +14,6 @@ public class UsuarioBase
     public string Password;
     public int Rol;
 
-    public UsuarioBase() { }
     public UsuarioBase(string nombre, string apellido1, string apellido2, string password)
     {
         Nombre = nombre;

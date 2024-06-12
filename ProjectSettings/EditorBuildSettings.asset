@@ -15,10 +15,10 @@ EditorBuildSettings:
     path: Assets/Scenes/Menu/MenuTemp.unity
     guid: 8a7f69407b479b148984cbda8bcce0d7
   - enabled: 1
-    path: Assets/Scenes/tienda/RecompensasVista.unity
+    path: Assets/Scenes/Profesor/RecompensasVista.unity
     guid: df137f5cd676e184cb79a1f2eb36a901
   - enabled: 1
-    path: Assets/Scenes/tienda/Canjeos.unity
+    path: Assets/Scenes/Profesor/Canjeos.unity
     guid: e6222f9fef590fd479d34a1c934b2342
   - enabled: 1
     path: Assets/Scenes/tienda/tienda.unity
