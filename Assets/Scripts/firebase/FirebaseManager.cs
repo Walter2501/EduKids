@@ -172,21 +172,21 @@ public class FirebaseManager : MonoBehaviour
 
 
 
-public void ElimincarUsuario(string nombreUsuario)
-    {
-
-        Debug.Log($"Intentando eliminar el usuario: {nombreUsuario} ");
-        DatabaseReference usuarioRef = dbReference.Child("Usuarios").Child(nombreUsuario);
-        usuarioRef.RemoveValueAsync().ContinueWith(task =>
+    public void ElimincarUsuario(string nombreUsuario)
         {
-            if (task.IsFaulted)
+
+            Debug.Log($"Intentando eliminar el usuario: {nombreUsuario} ");
+            DatabaseReference usuarioRef = dbReference.Child("Usuarios").Child(nombreUsuario);
+            usuarioRef.RemoveValueAsync().ContinueWith(task =>
             {
-                Debug.LogError("Error al eliminar el usuario: " + task.Exception);
-            }
-            else if (task.IsCompleted)
-            {
-                Debug.Log("Usuario eliminado exitosamente.");
-            }
-        });
-    }
+                if (task.IsFaulted)
+                {
+                    Debug.LogError("Error al eliminar el usuario: " + task.Exception);
+                }
+                else if (task.IsCompleted)
+                {
+                    Debug.Log("Usuario eliminado exitosamente.");
+                }
+            });
+        }
 }

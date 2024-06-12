@@ -29,6 +29,11 @@ public class Rol : MonoBehaviour
 
     private void DibujarUsuarios()
     {
+        foreach (Transform child in container)
+        {
+            Destroy(child.gameObject);
+        }
+
         foreach (var usuario in usuariosList)
         {
             GameObject usuarioGO = Instantiate(prefabUsuario, container);
