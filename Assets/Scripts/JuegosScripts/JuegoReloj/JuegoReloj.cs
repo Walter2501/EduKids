@@ -1,23 +1,15 @@
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class JuegoReloj : MonoBehaviour
+public class JuegoReloj : JuegoBase
 {
     [SerializeField] private Reloj[] relojsSO;
     [SerializeField] private TextMeshProUGUI[] textosHoras;
     [SerializeField] private Image relojImg;
-    [SerializeField] private AudioClip win;
-    [SerializeField] private AudioClip wrong;
-    [SerializeField] private int puntosPorRespuestaCorrecta;
 
-    private int puntosTotales = 0;
-    private int vecesJugado = 1;
-    private bool enEspera = false;
-    private AudioSource audioSource;
     private Reloj relojElegido;
     private string[][] horas_minutos =
     {
@@ -28,17 +20,7 @@ public class JuegoReloj : MonoBehaviour
     };
     private string horaCorrecta = "";
 
-    private void Awake()
-    {
-        audioSource = GetComponent<AudioSource>();
-    }
-
-    private void Start()
-    {
-        IniciarJuego();
-    }
-
-    private void IniciarJuego()
+    protected override void IniciarJuego()
     {
         relojElegido = relojsSO[Random.Range(0, relojsSO.Length)];
 
@@ -46,12 +28,12 @@ public class JuegoReloj : MonoBehaviour
         horaCorrecta = relojElegido.Hora;
 
         GenerarHoras();
-        enEspera = false;
+        base.IniciarJuego();
     }
 
     private void GenerarHoras()
     {
-        HashSet<string> horasTemp= new HashSet<string>();
+        HashSet<string> horasTemp = new HashSet<string>();
         horasTemp.Add(horaCorrecta);
 
         while (horasTemp.Count < 5)
@@ -79,11 +61,12 @@ public class JuegoReloj : MonoBehaviour
         }
     }
 
-    public void PresionarBoton(TextMeshProUGUI textoBoton)
+    public override void BotonOpcion(TextMeshProUGUI texto)
     {
         if (enEspera) return;
+        base.BotonOpcion(texto);
 
-        if (textoBoton.text == horaCorrecta)
+        if (texto.text == horaCorrecta)
         {
             audioSource.clip = win;
             audioSource.Play();
@@ -95,7 +78,6 @@ public class JuegoReloj : MonoBehaviour
             audioSource.Play();
         }
 
-        enEspera = true;
         vecesJugado++;
         if (vecesJugado > 5)
         {
@@ -106,14 +88,5 @@ public class JuegoReloj : MonoBehaviour
             Invoke("IniciarJuego", 1f);
         }
         return;
-    }
-
-    private IEnumerator TerminarJuego()
-    {
-        GameManager.Instance.AddMeritos(puntosTotales);
-        Debug.Log($"Terminado: {GameManager.Instance.cantidadMeritos}");
-        yield return new WaitForSeconds(1);
-        Debug.Log(puntosTotales);
-        GameManager.Instance.CambiarEscena(0);
     }
 }

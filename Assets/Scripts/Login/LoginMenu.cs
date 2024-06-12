@@ -264,6 +264,8 @@ public class LoginMenu : MonoBehaviour
         if (dataTemp.Password != password) //se revisa si el password es correcto
         {
             Debug.Log("Contraseña Incorrecta");
+            cargandoText.SetActive(false);
+            panelDatos.SetActive(true);
             yield break; //si es incorrecto cancela el login
         }
 

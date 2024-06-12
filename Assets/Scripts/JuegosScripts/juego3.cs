@@ -1,35 +1,22 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using static UnityEngine.Random;
 
-public class juego3 : MonoBehaviour
+public class juego3 : JuegoBase
 {
-    public TextMeshProUGUI txtPrin;
-    public TextMeshProUGUI[] txtRpt;
-    [SerializeField] private AudioClip win;
-    [SerializeField] private AudioClip wrong;
-    [SerializeField] private int puntosPorRespuestaCorrecta;
+    [SerializeField] private TextMeshProUGUI txtPrin;
+    [SerializeField] private TextMeshProUGUI[] txtRpt;
 
-    private int puntosTotales = 0;
-    private int vecesJugado = 1;
-    private bool enEspera = false;
-    private AudioSource audioSource;
     private string respuestaCorrecta = "";
 
-    private void Awake()
+    protected override void IniciarJuego()
     {
-        audioSource = GetComponent<AudioSource>();
+        CalcularSuma();
+        base.IniciarJuego();
     }
 
-    void Start()
-    {
-        calcularSuma();
-    }
-
-    public void calcularSuma()
+    public void CalcularSuma()
     {
         int num1 = Range(10, 100);
         int num2 = Range(10, 100);
@@ -43,10 +30,10 @@ public class juego3 : MonoBehaviour
 
         txtPrin.text = $"{num1} +\n<u>{num2}</u>\n??";
 
-        dibujarRespuestas(num1, num2);
+        DibujarRespuestas(num1, num2);
     }
 
-    public void dibujarRespuestas(int num1, int num2)
+    public void DibujarRespuestas(int num1, int num2)
     {
         int ramdonIndex = Range(0, txtRpt.Length);
         txtRpt[ramdonIndex].text = $"{num1 + num2}";
@@ -54,7 +41,7 @@ public class juego3 : MonoBehaviour
         respuestaCorrecta = txtRpt[ramdonIndex].text;
 
         List<int> availableIndexes = new List<int>();
-        for (int i = 0; i < txtRpt.Length; i++) 
+        for (int i = 0; i < txtRpt.Length; i++)
         {
             if (i != ramdonIndex)
             {
@@ -64,14 +51,14 @@ public class juego3 : MonoBehaviour
 
         Shuffle(availableIndexes);
 
-        for (int i = 0; i < txtRpt.Length - 1; i++) 
+        for (int i = 0; i < txtRpt.Length - 1; i++)
         {
             int numAle1, numAle2;
             do
             {
                 numAle1 = Range(0, 100);
                 numAle2 = Range(0, 100);
-            } while (numAle1 == num1 || numAle1 == num2 || numAle2 == num1 || numAle2 == num2 || (numAle1 + numAle2) >100);
+            } while (numAle1 == num1 || numAle1 == num2 || numAle2 == num1 || numAle2 == num2 || (numAle1 + numAle2) > 100);
 
             txtRpt[availableIndexes[i]].text = $"{numAle1 + numAle2}";
         }
@@ -90,10 +77,11 @@ public class juego3 : MonoBehaviour
         }
     }
 
-    public void PresionarBoton(TextMeshProUGUI textoBoton)
+    public override void BotonOpcion(TextMeshProUGUI texto)
     {
         if (enEspera) return;
-        if (textoBoton.text == respuestaCorrecta)
+        base.BotonOpcion(texto);
+        if (texto.text == respuestaCorrecta)
         {
             audioSource.clip = win;
             audioSource.Play();
@@ -104,7 +92,6 @@ public class juego3 : MonoBehaviour
             audioSource.clip = wrong;
             audioSource.Play();
         }
-        enEspera = true;
         vecesJugado++;
         if (vecesJugado > 5)
         {
@@ -112,16 +99,7 @@ public class juego3 : MonoBehaviour
         }
         else
         {
-            Invoke("calcularSuma", 1f);
+            Invoke("IniciarJuego", 1f);
         }
-    }
-
-    private IEnumerator TerminarJuego()
-    {
-        GameManager.Instance.AddMeritos(puntosTotales);
-        Debug.Log($"Terminado: {GameManager.Instance.cantidadMeritos}");
-        yield return new WaitForSeconds(1);
-        Debug.Log(puntosTotales);
-        GameManager.Instance.CambiarEscena(0);
     }
 }

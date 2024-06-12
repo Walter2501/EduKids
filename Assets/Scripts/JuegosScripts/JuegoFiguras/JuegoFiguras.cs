@@ -5,30 +5,19 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class JuegoFiguras : MonoBehaviour
+public class JuegoFiguras : JuegoBase
 {
     [SerializeField] private FigurasGeometricas[] figuras;
     [SerializeField] private TextMeshProUGUI[] textosBotones;
     [SerializeField] private Image figuraImg;
-    [SerializeField] private AudioClip win;
-    [SerializeField] private AudioClip wrong;
-    [SerializeField] private int puntosPorRespuestaCorrecta;
 
-    private int puntosTotales = 0;
-    private int vecesJugado = 1;
-    private bool enEspera = false;
-    private AudioSource audioSource;
     private string ladosCorrectos = "";
     private FigurasGeometricas figuraElegida;
 
-    private void Awake()
-    {
-        audioSource = GetComponent<AudioSource>();
-    }
-
-    private void Start()
+    protected override void IniciarJuego()
     {
         ElegirFiguras();
+        base.IniciarJuego();
     }
 
     private void ElegirFiguras()
@@ -63,9 +52,10 @@ public class JuegoFiguras : MonoBehaviour
         enEspera = false;
     }
 
-    public void PresionarBoton(TextMeshProUGUI texto)
+    public override void BotonOpcion(TextMeshProUGUI texto)
     {
         if (enEspera) return;
+        base.BotonOpcion(texto);
         if (texto.text == ladosCorrectos)
         {
             audioSource.clip = win;
@@ -78,7 +68,6 @@ public class JuegoFiguras : MonoBehaviour
             audioSource.clip = wrong;
             audioSource.Play();
         }
-        enEspera = true;
         vecesJugado++;
         if (vecesJugado > 5)
         {
@@ -88,14 +77,5 @@ public class JuegoFiguras : MonoBehaviour
         {
             Invoke("ElegirFiguras", 1f);
         }
-    }
-
-    private IEnumerator TerminarJuego()
-    {
-        GameManager.Instance.AddMeritos(puntosTotales);
-        Debug.Log($"Terminado: {GameManager.Instance.cantidadMeritos}");
-        yield return new WaitForSeconds(1);
-        Debug.Log(puntosTotales);
-        GameManager.Instance.CambiarEscena(0);
     }
 }

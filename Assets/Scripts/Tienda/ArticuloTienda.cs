@@ -26,16 +26,16 @@ public class ArticuloTienda : MonoBehaviour
     {
         int meritosActuales = GameManager.Instance.cantidadMeritos;
         if (meritosActuales - data.cantidad < 0) return;
-        GameManager.Instance.AddMeritos(-data.cantidad);
+        //GameManager.Instance.AddMeritos(-data.cantidad);
         AñadirCanjeo(data);
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
     private void AñadirCanjeo(RecompensaData newCanjeo)
     {
-        List<CanjeoData> CanjeoListTemp = CanjeosManager.LoadCanjeos();
-        CanjeoData canje = new CanjeoData($"{GameManager.Instance.nombre} {GameManager.Instance.apellido}", data.nombre);
-        CanjeoListTemp.Add(canje);
-        CanjeosManager.SaveCanjeos(CanjeoListTemp);
+        //List<CanjeoData> CanjeoListTemp = CanjeosManager.LoadCanjeos();
+        //CanjeoData canje = new CanjeoData($"{GameManager.Instance.nombre} {GameManager.Instance.apellido}", data.nombre);
+        //CanjeoListTemp.Add(canje);
+        //CanjeosManager.SaveCanjeos(CanjeoListTemp);
     }
 }

@@ -1,47 +1,28 @@
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
-public class Juego5 : MonoBehaviour
+public class Juego5 : JuegoBase
 {
     [SerializeField] private GameObject[] manzanas;
     [SerializeField] private GameObject[] manzanasT; //las manzanas tachadas
     [SerializeField] private TextMeshProUGUI[] textoBotones;
     [SerializeField] private TextMeshProUGUI resta;
-    [SerializeField] private AudioClip win;
-    [SerializeField] private AudioClip wrong;
-    [SerializeField] private int puntosPorRespuestaCorrecta;
 
-    private int puntosTotales = 0;
-    private int vecesJugado = 1;
-    private bool enEspera = false;
-    private AudioSource audioSource;
     private int[] respuestas = new int[5];
     private int numManzanas;
     private int numManzanasT;
-    private int totalManzanas; 
+    private int totalManzanas;
     private int respuestaCorrecta;
 
-    private void Awake()
-    {
-        audioSource = GetComponent<AudioSource>();
-    }
-
-    private void Start()
-    {
-        IniciarJuego();
-    }
-
-    private void IniciarJuego()
+    protected override void IniciarJuego()
     {
         DecidirManzanasParaUsar();
         EncenderManzanas();
         GeneracionRespuestas();
         Escritura();
-        enEspera = false;
+        base.IniciarJuego();
     }
 
     private void DecidirManzanasParaUsar()
@@ -95,7 +76,7 @@ public class Juego5 : MonoBehaviour
         }
     }
 
-    public void PresionarBoton(TextMeshProUGUI texto)
+    public override void BotonOpcion(TextMeshProUGUI texto)
     {
         if (enEspera) return;
         for (int i = 0; i < textoBotones.Length; i++)
@@ -114,7 +95,7 @@ public class Juego5 : MonoBehaviour
                     audioSource.clip = wrong;
                     audioSource.Play();
                 }
-                enEspera = true;
+                base.BotonOpcion(texto);
                 vecesJugado++;
                 if (vecesJugado > 5)
                 {
@@ -127,14 +108,5 @@ public class Juego5 : MonoBehaviour
                 return;
             }
         }
-    }
-
-    private IEnumerator TerminarJuego()
-    {
-        GameManager.Instance.AddMeritos(puntosTotales);
-        Debug.Log($"Terminado: {GameManager.Instance.cantidadMeritos}");
-        yield return new WaitForSeconds(1);
-        Debug.Log(puntosTotales);
-        GameManager.Instance.CambiarEscena(0);
     }
 }

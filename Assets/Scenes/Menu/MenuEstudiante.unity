@@ -206,7 +206,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1535994896}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: MenuScript, Assembly-CSharp
         m_MethodName: CambiarEscena
         m_Mode: 5
@@ -1241,11 +1241,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 1535994891}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5d7002b8fbf0d9e40ac738731784de95, type: 3}
+  m_Script: {fileID: 11500000, guid: 2f28ffcf727d0b141b4ca972aa20c5fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  meritosText: {fileID: 1268330084}
   nombreText: {fileID: 1491101087}
+  meritosText: {fileID: 1268330084}
+  actividades: {fileID: 1666321403}
+  recompensas: {fileID: 119380872}
 --- !u!1 &1590900543
 GameObject:
   m_ObjectHideFlags: 0
@@ -1475,7 +1477,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1535994896}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: MenuScript, Assembly-CSharp
         m_MethodName: CambiarEscena
         m_Mode: 5

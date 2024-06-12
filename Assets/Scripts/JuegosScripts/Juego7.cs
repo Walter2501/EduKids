@@ -4,33 +4,16 @@ using System.Linq;
 using TMPro;
 using UnityEngine;
 
-public class Juego7 : MonoBehaviour
+public class Juego7 : JuegoBase
 {
     [SerializeField] private TextMeshProUGUI[] textoBotones;
     [SerializeField] private TextMeshProUGUI textoSuma;
-    [SerializeField] private AudioClip win;
-    [SerializeField] private AudioClip wrong;
-    [SerializeField] private int puntosPorRespuestaCorrecta;
 
-    private int puntosTotales = 0;
-    private int vecesJugado = 1;
-    private bool enEspera = false;
-    private AudioSource audioSource;
     private int num1 = 0;
     private int num2 = 0;
     private int suma = 0;
 
-    private void Awake()
-    {
-        audioSource = GetComponent<AudioSource>();
-    }
-
-    private void Start()
-    {
-        IniciarJuego();
-    }
-
-    private void IniciarJuego()
+    protected override void IniciarJuego()
     {
         num1 = Random.Range(0, 10);
         num2 = Random.Range(0, 10);
@@ -39,7 +22,7 @@ public class Juego7 : MonoBehaviour
         textoSuma.text = $"{num1} + {num2}";
 
         GenerarRespuestas();
-        enEspera = false;
+        base.IniciarJuego();
     }
 
     private void GenerarRespuestas()
@@ -59,9 +42,10 @@ public class Juego7 : MonoBehaviour
         textoBotones[Random.Range(0, textoBotones.Length)].text = $"{suma}";
     }
 
-    public void PresionarBoton(TextMeshProUGUI texto)
+    public override void BotonOpcion(TextMeshProUGUI texto)
     {
         if (enEspera) return;
+        base.BotonOpcion(texto);
 
         if (texto.text == $"{suma}")
         {
@@ -76,7 +60,6 @@ public class Juego7 : MonoBehaviour
             audioSource.Play();
         }
 
-        enEspera = true;
         vecesJugado++;
         if (vecesJugado > 5)
         {
@@ -87,14 +70,5 @@ public class Juego7 : MonoBehaviour
             Invoke("IniciarJuego", 1f);
         }
         return;
-    }
-
-    private IEnumerator TerminarJuego()
-    {
-        GameManager.Instance.AddMeritos(puntosTotales);
-        Debug.Log($"Terminado: {GameManager.Instance.cantidadMeritos}");
-        yield return new WaitForSeconds(1);
-        Debug.Log(puntosTotales);
-        GameManager.Instance.CambiarEscena(0);
     }
 }

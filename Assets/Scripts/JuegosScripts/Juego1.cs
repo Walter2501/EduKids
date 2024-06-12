@@ -1,47 +1,27 @@
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
-public class Juego1 : MonoBehaviour
+public class Juego1 : JuegoBase
 {
     [SerializeField] private GameObject[] Manzanas;
     [SerializeField] private TextMeshProUGUI[] textosBotones;
-    [SerializeField] private AudioClip win;
-    [SerializeField] private AudioClip wrong;
-    [SerializeField] private int puntosPorRespuestaCorrecta;
-
-    private int puntosTotales = 0;
-    private int vecesJugado = 1;
-    private bool enEspera = false;
-    private AudioSource audioSource;
     private int[] numeros = new int[6];
     private int cantidadAleatoria = 0; //tambien la respuesta correcta
 
-    private void Awake()
-    {
-        audioSource = GetComponent<AudioSource>();
-    }
-
-    private void Start()
-    {
-        IniciarJuego();
-    }
-
-    private void IniciarJuego()
+    protected override void IniciarJuego()
     {
         cantidadAleatoria = Random.Range(1, 11);
         EncenderManzanas(cantidadAleatoria);
         GenerarNumeros();
         AsignarNumeros();
-        enEspera = false;
+        base.IniciarJuego();
     }
 
     private void EncenderManzanas(int cantidad)
     {
-        
+
         for (int i = 0; i < Manzanas.Length; i++)
         {
             if (i < cantidadAleatoria) Manzanas[i].SetActive(true);
@@ -81,9 +61,10 @@ public class Juego1 : MonoBehaviour
         }
     }
 
-    public void BotonRespuestaCorrecta(TextMeshProUGUI texto)
+    public override void BotonOpcion(TextMeshProUGUI texto)
     {
         if (enEspera) return;
+        base.BotonOpcion(texto);
         for (int i = 0; i < textosBotones.Length; i++)
         {
             if (textosBotones[i] == texto)
@@ -94,13 +75,11 @@ public class Juego1 : MonoBehaviour
                     audioSource.Play();
                     puntosTotales += puntosPorRespuestaCorrecta;
                 }
-
                 else
                 {
                     audioSource.clip = wrong;
                     audioSource.Play();
                 }
-                enEspera = true;
                 vecesJugado++;
                 if (vecesJugado > 5)
                 {
@@ -113,14 +92,5 @@ public class Juego1 : MonoBehaviour
                 return;
             }
         }
-    }
-
-    private IEnumerator TerminarJuego()
-    {
-        GameManager.Instance.AddMeritos(puntosTotales);
-        Debug.Log($"Terminado: {GameManager.Instance.cantidadMeritos}");
-        yield return new WaitForSeconds(1);
-        Debug.Log(puntosTotales);
-        GameManager.Instance.CambiarEscena(0);
     }
 }

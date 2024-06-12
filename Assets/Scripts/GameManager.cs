@@ -21,29 +21,27 @@ public class GameManager : MonoBehaviour
     }
     #endregion
 
-    public string usuarioID => PlayerPrefs.GetString(USUARIOID_KEY, "");
+    public string usuarioID => PlayerPrefs.GetString(USUARIOID_KEY, ""); //Se guarda el userID al iniciar sesion, para que ya no tenga que pasar por el login
     private string USUARIOID_KEY = "usuarioID_Key";
 
     //solo se usa si es estudiante:
-    public string maestroID => PlayerPrefs.GetString(MAESTROID_KEY, "");
+    public string maestroID => PlayerPrefs.GetString(MAESTROID_KEY, ""); //Esto es para el estudiante, aqui guarda el codigo de su profe
     private string MAESTROID_KEY = "maestroID_Key";
 
     //solo se usa si es padre:
-    public string estudianteID => PlayerPrefs.GetString(ESTUDIANTEID_KEY, "");
+    public string estudianteID => PlayerPrefs.GetString(ESTUDIANTEID_KEY, ""); //Esto es para los padres, aqui guarda el codigo de su hijo
     private string ESTUDIANTEID_KEY = "estudianteID_Key";
 
 
-    public int rol => PlayerPrefs.GetInt(ROL_KEY, -1);
+    public int rol => PlayerPrefs.GetInt(ROL_KEY, -1); //guarda el rol, por la misma razón que el userID se guarda, pero este es para saber a que menu ir
     private string ROL_KEY = "rol_password";
 
-    public DatabaseReference database;
+    public DatabaseReference database; //guarda la referencia del database
 
     public Estudiante estudiante = null; //solo se llenara el del rol, los dem�s se quedaran vacios
     public Maestro maestro = null;
 
     public int cantidadMeritos;
-    public string nombre;
-    public string apellido;
 
     private void Awake()
     {
@@ -60,22 +58,12 @@ public class GameManager : MonoBehaviour
     private void Update()
     {
 #if UNITY_EDITOR
-        if (Input.GetKeyDown(KeyCode.F10))
+        if (Input.GetKeyDown(KeyCode.F10)) //solo funciona en el editor, borra los datos locales, al hacerlo se tiene que volver a iniciar sesion la proxima vez que se ponga play
         {
             PlayerPrefs.DeleteKey(USUARIOID_KEY);
             PlayerPrefs.DeleteKey(ROL_KEY);
         }
-        if (Input.GetKeyDown(KeyCode.F11))
-        {
-            if (maestro != null) Debug.Log($"maestro existe: {maestro}");
-            else Debug.Log($"maestro no existe");
-        }
 #endif
-    }
-
-    public void AddMeritos(int cantidad_to_add)
-    {
-
     }
 
     public void SetUserID(string newID)

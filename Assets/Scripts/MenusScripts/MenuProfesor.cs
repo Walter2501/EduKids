@@ -31,6 +31,6 @@ public class MenuProfesor : MonoBehaviour
 
     public void IrGestionAlumnos()
     {
-        GameManager.Instance.CambiarEscena("GestionarRoles");
+        GameManager.Instance.CambiarEscena("GestionarEstudiantes");
     }
 }

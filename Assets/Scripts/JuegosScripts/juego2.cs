@@ -1,37 +1,24 @@
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
-using System.Collections;
 
-public class juego2 : MonoBehaviour
+public class juego2 : JuegoBase
 {
-    public TextMeshProUGUI textPrin;
-    public TextMeshProUGUI[] textRptIArray;
-    [SerializeField] private AudioClip win;
-    [SerializeField] private AudioClip wrong;
-    [SerializeField] private int puntosPorRespuestaCorrecta;
+    [SerializeField] private TextMeshProUGUI textPrin;
+    [SerializeField] private TextMeshProUGUI[] textRptIArray;
 
-    private int puntosTotales = 0;
-    private int vecesJugado = 1;
-    private bool enEspera = false;
-    private AudioSource audioSource;
-    int num;
-    int[] inferior;
-    int[] superior;
-    string respuestaCorrecta = "";
+    private int num;
+    private int[] inferior;
+    private int[] superior;
+    private string respuestaCorrecta = "";
 
-    private void Awake()
+    protected override void IniciarJuego()
     {
-        audioSource = GetComponent<AudioSource>();
+        CalcularNum();
+        base.IniciarJuego();
     }
 
-    void Start()
-    {
-        calcularNum();
-    }
-
-
-    public void calcularNum()
+    public void CalcularNum()
     {
         num = Random.Range(0, 10);
 
@@ -46,10 +33,10 @@ public class juego2 : MonoBehaviour
 
 
         textPrin.text = $"_{num}_";
-        generarRespuestas(num);
+        GenerarRespuestas(num);
     }
 
-    public void dibujarRespuestas()
+    public void DibujarRespuestas()
     {
 
         int randomIndex = Random.Range(0, textRptIArray.Length);
@@ -74,7 +61,7 @@ public class juego2 : MonoBehaviour
         enEspera = false;
     }
 
-    public void generarRespuestas(int numero)
+    public void GenerarRespuestas(int numero)
     {
         // Respuesta correcta
         int respuestaCorrectaInf = Mathf.Max(numero - 1, 0);
@@ -97,7 +84,7 @@ public class juego2 : MonoBehaviour
         inferior = new int[] { respuestaCorrectaInf, respuestasIncorrectas[0], respuestasIncorrectas[1], respuestasIncorrectas[2], respuestasIncorrectas[3] };
         superior = new int[] { respuestaCorrectaSup, respuestasIncorrectas[4], respuestasIncorrectas[5], respuestasIncorrectas[6], respuestasIncorrectas[7] };
 
-        dibujarRespuestas();
+        DibujarRespuestas();
     }
 
     // Función para mezclar una lista
@@ -112,23 +99,21 @@ public class juego2 : MonoBehaviour
         }
     }
 
-    public void PresionarBoton(TextMeshProUGUI textoBoton)
+    public override void BotonOpcion(TextMeshProUGUI texto)
     {
         if (enEspera) return;
-
-        if (textoBoton.text == respuestaCorrecta)
+        base.BotonOpcion(texto);
+        if (texto.text == respuestaCorrecta)
         {
             audioSource.clip = win;
             audioSource.Play();
             puntosTotales += puntosPorRespuestaCorrecta;
         }
-
         else
         {
             audioSource.clip = wrong;
             audioSource.Play();
         }
-        enEspera = true;
         vecesJugado++;
         if (vecesJugado > 5)
         {
@@ -136,17 +121,8 @@ public class juego2 : MonoBehaviour
         }
         else
         {
-            Invoke("calcularNum", 1f);
+            Invoke("IniciarJuego", 1f);
         }
         return;
-    }
-
-    private IEnumerator TerminarJuego()
-    {
-        GameManager.Instance.AddMeritos(puntosTotales);
-        Debug.Log($"Terminado: {GameManager.Instance.cantidadMeritos}");
-        yield return new WaitForSeconds(1);
-        Debug.Log(puntosTotales);
-        GameManager.Instance.CambiarEscena(0);
     }
 }
