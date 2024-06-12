@@ -4,6 +4,7 @@ using Firebase.Extensions;
 using Firebase.Auth;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Threading.Tasks;
 
 public class FirebaseManager : MonoBehaviour
 {
@@ -117,5 +118,75 @@ public class FirebaseManager : MonoBehaviour
                     Debug.Log("Rol del usuario cambiado exitosamente.");
                 }
             });
+    }
+
+    public void buscarUsuario(string nombreUsuario)
+    {
+        UsuarioBase objUsuario = null;  // Mover la inicialización aquí
+        dbReference.Child("Usuarios").GetValueAsync().ContinueWithOnMainThread(task =>
+        {
+            if (task.IsFaulted)
+            {
+                Debug.LogError("Error loading users: " + task.Exception);
+            }
+            else if (task.IsCompleted)
+            {
+                DataSnapshot snapshot = task.Result;
+                usuariosList.Clear();  // Limpiar la lista antes de llenarla
+
+                foreach (DataSnapshot userSnapshot in snapshot.Children)
+                {
+                    var usuario = JsonUtility.FromJson<UsuarioBase>(userSnapshot.GetRawJsonValue());
+                    usuario.Nombre = userSnapshot.Key; // Set the key as the username
+
+                    if ((usuario.Nombre + usuario.Apellido1 + usuario.Apellido2) == nombreUsuario)
+                    {
+                        objUsuario = usuario;  // Asignar el usuario encontrado
+                    }
+
+                    usuariosList.Add(usuario);
+                }
+
+                if (objUsuario != null)
+                {
+                    // Hacer algo con objUsuario si es necesario
+                    Debug.Log("Usuario encontrado: " + objUsuario.Nombre);
+                }
+                else
+                {
+                    Debug.LogWarning("Usuario no encontrado.");
+                }
+
+                // Notify Rol script
+                if (rolScript != null)
+                {
+                    rolScript.OnUsuariosLoaded(usuariosList);
+                }
+                else
+                {
+                    Debug.LogError("Rol script reference is not set in FirebaseManager.");
+                }
+            }
+        });
+    }
+
+
+
+public void ElimincarUsuario(string nombreUsuario)
+    {
+
+        Debug.Log($"Intentando eliminar el usuario: {nombreUsuario} ");
+        DatabaseReference usuarioRef = dbReference.Child("Usuarios").Child(nombreUsuario);
+        usuarioRef.RemoveValueAsync().ContinueWith(task =>
+        {
+            if (task.IsFaulted)
+            {
+                Debug.LogError("Error al eliminar el usuario: " + task.Exception);
+            }
+            else if (task.IsCompleted)
+            {
+                Debug.Log("Usuario eliminado exitosamente.");
+            }
+        });
     }
 }

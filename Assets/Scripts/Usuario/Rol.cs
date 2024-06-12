@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using System;
+using UnityEngine.UI;
 
 public class Rol : MonoBehaviour
 {
@@ -40,6 +42,10 @@ public class Rol : MonoBehaviour
 
             // Set callback for when the dropdown value changes
             rolesDropdown.onValueChanged.AddListener((index) => OnRolesDropdownValueChanged(rolesDropdown, usuario.Nombre));
+
+
+            Button eliminarButton = usuarioGO.GetComponentInChildren<Button>();
+            eliminarButton.onClick.AddListener(() => btnEliminar(usuario.Nombre));
         }
     }
 
@@ -54,6 +60,21 @@ public class Rol : MonoBehaviour
         else
         {
             Debug.LogError("FirebaseManager es nulo.");
+        }
+    }
+
+    private void btnEliminar(string nombreUsuario)
+    {
+        try
+        {
+            if (firebaseManager != null)
+            {
+                firebaseManager.ElimincarUsuario(nombreUsuario);
+            }
+        }
+        catch(Exception e)
+        {
+            Debug.LogError($"El error es: {e}");
         }
     }
 }
