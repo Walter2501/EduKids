@@ -65,6 +65,7 @@ public class CanjeosManager : MonoBehaviour
         {
             string json = JsonConvert.SerializeObject(GameManager.Instance.maestro);
             var newDataToSave = GameManager.Instance.database.Child("Usuarios").Child(GameManager.Instance.usuarioID).SetRawJsonValueAsync(json);
+            yield return new WaitUntil(() => newDataToSave.IsCompleted);
 
             if (newDataToSave.IsFaulted)
             {

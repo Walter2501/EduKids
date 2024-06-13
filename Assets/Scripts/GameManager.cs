@@ -41,8 +41,6 @@ public class GameManager : MonoBehaviour
     public Estudiante estudiante = null; //solo se llenara el del rol, los dem�s se quedaran vacios
     public Maestro maestro = null;
 
-    public int cantidadMeritos;
-
     private void Awake()
     {
         instance = this;
@@ -69,6 +67,12 @@ public class GameManager : MonoBehaviour
     public void SetUserID(string newID)
     {
         PlayerPrefs.SetString(USUARIOID_KEY, newID);
+        PlayerPrefs.Save();
+    }
+
+    public void SetProfesorUserID(string profesorID)
+    {
+        PlayerPrefs.SetString(MAESTROID_KEY, profesorID);
         PlayerPrefs.Save();
     }
 

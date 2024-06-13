@@ -173,6 +173,9 @@ public class LoginMenu : MonoBehaviour
 
             string json = JsonConvert.SerializeObject(newCodigo);
             var serverCodeToRegsiter = GameManager.Instance.database.Child("Codigos").Child(code).SetRawJsonValueAsync(json);
+
+            yield return new WaitUntil(() => serverCodeToRegsiter.IsCompleted);
+
             if (serverCodeToRegsiter.IsFaulted)
             {
                 Debug.LogError("Error al guardar el codigo: " + serverCodeToRegsiter.Exception);
@@ -190,6 +193,8 @@ public class LoginMenu : MonoBehaviour
 
             string json = JsonConvert.SerializeObject(newEstudiante);
             var serverToRegister = GameManager.Instance.database.Child("Usuarios").Child(userID).SetRawJsonValueAsync(json);
+
+            yield return new WaitUntil(() => serverToRegister.IsCompleted);
 
             if (serverToRegister.IsFaulted)
             {
@@ -210,6 +215,8 @@ public class LoginMenu : MonoBehaviour
 
             string json = JsonConvert.SerializeObject(newMaestro);
             var serverToRegister = GameManager.Instance.database.Child("Usuarios").Child(userID).SetRawJsonValueAsync(json);
+
+            yield return new WaitUntil(() => serverToRegister.IsCompleted);
 
             if (serverToRegister.IsFaulted)
             {
@@ -247,7 +254,7 @@ public class LoginMenu : MonoBehaviour
 
         DataSnapshot snapshot = serverData.Result;
 
-        if (!snapshot.Exists) //Si el usuario ya existe lo regresa al inicio para que se logee
+        if (!snapshot.Exists) //Si el usuario no existe lo regresa al inicio para que se registre
         {
             Debug.Log("Este usuario no existe, registrese");
             register = false;

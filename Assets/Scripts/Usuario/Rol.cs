@@ -42,25 +42,25 @@ public class Rol : MonoBehaviour
 
             TMP_Dropdown rolesDropdown = usuarioGO.GetComponentInChildren<TMP_Dropdown>();
             rolesDropdown.ClearOptions();
-            rolesDropdown.AddOptions(new List<string> { "Estudiante", "Padre" });
+            rolesDropdown.AddOptions(new List<string> { "Estudiante", "Padre", "Maestro" });
             rolesDropdown.value = usuario.Rol;
 
             // Set callback for when the dropdown value changes
-            rolesDropdown.onValueChanged.AddListener((index) => OnRolesDropdownValueChanged(rolesDropdown, usuario.Nombre));
+            rolesDropdown.onValueChanged.AddListener((index) => OnRolesDropdownValueChanged(rolesDropdown, $"{usuario.Nombre}{usuario.Apellido1}{usuario.Apellido2}"));
 
 
             Button eliminarButton = usuarioGO.GetComponentInChildren<Button>();
-            eliminarButton.onClick.AddListener(() => btnEliminar(usuario.Nombre));
+            eliminarButton.onClick.AddListener(() => btnEliminar($"{usuario.Nombre}{usuario.Apellido1}{usuario.Apellido2}"));
         }
     }
 
     // Método que se llama cuando cambia la selección del Dropdown
-    private void OnRolesDropdownValueChanged(TMP_Dropdown dropdown, string nombreUsuario)
+    private void OnRolesDropdownValueChanged(TMP_Dropdown dropdown, string usuarioID)
     {
         if (firebaseManager != null)
         {
             int nuevoRol = dropdown.value;
-            firebaseManager.CambiarRolUsuario(nombreUsuario, nuevoRol);
+            firebaseManager.CambiarRolUsuario(usuarioID, nuevoRol);
         }
         else
         {
@@ -68,13 +68,13 @@ public class Rol : MonoBehaviour
         }
     }
 
-    private void btnEliminar(string nombreUsuario)
+    private void btnEliminar(string usuarioID)
     {
         try
         {
             if (firebaseManager != null)
             {
-                firebaseManager.ElimincarUsuario(nombreUsuario);
+                firebaseManager.EliminarUsuario(usuarioID);
             }
         }
         catch(Exception e)

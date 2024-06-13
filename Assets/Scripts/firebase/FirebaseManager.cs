@@ -4,7 +4,7 @@ using Firebase.Extensions;
 using Firebase.Auth;
 using System.Collections.Generic;
 using UnityEngine;
-using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 public class FirebaseManager : MonoBehaviour
 {
@@ -82,7 +82,7 @@ public class FirebaseManager : MonoBehaviour
                 DataSnapshot snapshot = task.Result;
                 foreach (DataSnapshot userSnapshot in snapshot.Children)
                 {
-                    var usuario = JsonUtility.FromJson<UsuarioBase>(userSnapshot.GetRawJsonValue());
+                    var usuario = JsonConvert.DeserializeObject<UsuarioBase>(userSnapshot.GetRawJsonValue());
                     usuario.Nombre = userSnapshot.Key; // Set the key as the username
                     usuariosList.Add(usuario);
                 }
@@ -101,26 +101,49 @@ public class FirebaseManager : MonoBehaviour
     }
 
     // Method to change the role of a user
-    public void CambiarRolUsuario(string nombreUsuario, int nuevoRol)
+    public void CambiarRolUsuario(string usuarioID, int nuevoRol)
     {
-        Debug.Log($"Intentando cambiar el rol del usuario: {nombreUsuario} a {nuevoRol}");
+        Debug.Log($"Intentando cambiar el rol del usuario: {usuarioID} a {nuevoRol}");
 
-        DatabaseReference usuariosRef = dbReference.Child("Usuarios");
-        usuariosRef.Child(nombreUsuario).Child("Rol").SetValueAsync(nuevoRol)
-            .ContinueWith(task =>
+        dbReference.Child("Usuarios").Child(usuarioID).GetValueAsync().ContinueWithOnMainThread(task =>
+        {
+            if (task.IsFaulted)
             {
-                if (task.IsFaulted)
+                Debug.LogError("Error loading users: " + task.Exception);
+            }
+            else if (task.IsCompleted)
+            {
+                DataSnapshot snapshot = task.Result;
+                string jsonData = snapshot.GetRawJsonValue();
+                UsuarioBase usuario = JsonConvert.DeserializeObject<UsuarioBase>(jsonData); //guardo el resultado como usuario base para lo siguiente
+
+                if (usuario.Rol == nuevoRol) return; //Si el nuevo rol es igual al que ya tiene se cancela
+
+                string newCode = UniqueCodeGenerator.GenerateCode(usuarioID);
+                //De hecho el codigo no cambia ya que se genera en base al usuarioID,
+                //pero como usuarioBase no tiene acceso al codigo, porque no todos los usuarios lo tienen, lo genero de nuevo
+
+                if (nuevoRol == 0)
                 {
-                    Debug.LogError("Error al cambiar el rol del usuario: " + task.Exception);
+                    Estudiante newEstudiante = new Estudiante(usuario.Nombre, usuario.Apellido1, usuario.Apellido2, usuario.Password, newCode); //vuelvo a crear el usuario pero como estudiante
+                    string json = JsonConvert.SerializeObject(newEstudiante); //lo serializo
+                    dbReference.Child("Usuarios").Child(usuarioID).SetRawJsonValueAsync(json); //lo guardo
                 }
-                else if (task.IsCompleted)
+                else if (nuevoRol == 1)
                 {
-                    Debug.Log("Rol del usuario cambiado exitosamente.");
+                    //por decidirse
                 }
-            });
+                else if (nuevoRol == 2)
+                {
+                    Maestro newMaestro = new Maestro(usuario.Nombre, usuario.Apellido1, usuario.Apellido2, usuario.Password, newCode); //vuelvo a crear el usuario pero como maestro
+                    string json = JsonConvert.SerializeObject(newMaestro); //lo serializo
+                    dbReference.Child("Usuarios").Child(usuarioID).SetRawJsonValueAsync(json); //lo guardo
+                }
+            }
+        });
     }
 
-    public void buscarUsuario(string nombreUsuario)
+    public void buscarUsuario(string usuarioID)
     {
         UsuarioBase objUsuario = null;  // Mover la inicialización aquí
         dbReference.Child("Usuarios").GetValueAsync().ContinueWithOnMainThread(task =>
@@ -136,10 +159,10 @@ public class FirebaseManager : MonoBehaviour
 
                 foreach (DataSnapshot userSnapshot in snapshot.Children)
                 {
-                    var usuario = JsonUtility.FromJson<UsuarioBase>(userSnapshot.GetRawJsonValue());
+                    var usuario = JsonConvert.DeserializeObject<UsuarioBase>(userSnapshot.GetRawJsonValue());
                     usuario.Nombre = userSnapshot.Key; // Set the key as the username
 
-                    if ((usuario.Nombre + usuario.Apellido1 + usuario.Apellido2) == nombreUsuario)
+                    if ((usuario.Nombre + usuario.Apellido1 + usuario.Apellido2) == usuarioID)
                     {
                         objUsuario = usuario;  // Asignar el usuario encontrado
                     }
@@ -172,21 +195,41 @@ public class FirebaseManager : MonoBehaviour
 
 
 
-    public void ElimincarUsuario(string nombreUsuario)
-        {
+    public void EliminarUsuario(string usuarioID)
+    {
+        Debug.Log($"Intentando eliminar el usuario: {usuarioID} ");
+        DatabaseReference usuarioRef = dbReference.Child("Usuarios").Child(usuarioID);
 
-            Debug.Log($"Intentando eliminar el usuario: {nombreUsuario} ");
-            DatabaseReference usuarioRef = dbReference.Child("Usuarios").Child(nombreUsuario);
-            usuarioRef.RemoveValueAsync().ContinueWith(task =>
+        //Tambien hay que borrar el codigo si es que tiene
+        //Como el codigo se genera en base al usuarioId en lugar de buscarlo
+        //puedo volver a generarlo
+        string userCode = UniqueCodeGenerator.GenerateCode(usuarioID);
+
+
+        //Si no hay codigo porque no todos los usuarios tienen (los padres) simplemente este no hará nada
+        dbReference.Child("Codigos").Child(userCode).RemoveValueAsync().ContinueWith(task =>
+        {
+            if (task.IsFaulted)
             {
-                if (task.IsFaulted)
-                {
-                    Debug.LogError("Error al eliminar el usuario: " + task.Exception);
-                }
-                else if (task.IsCompleted)
-                {
-                    Debug.Log("Usuario eliminado exitosamente.");
-                }
-            });
-        }
+                Debug.LogError("Error al eliminar el codigo del usuario: " + task.Exception);
+            }
+            else if (task.IsCompleted)
+            {
+                Debug.Log("Codigo del Usuario eliminado exitosamente.");
+            }
+        });
+
+        //Se borra el usuario
+        usuarioRef.RemoveValueAsync().ContinueWith(task =>
+        {
+            if (task.IsFaulted)
+            {
+                Debug.LogError("Error al eliminar el usuario: " + task.Exception);
+            }
+            else if (task.IsCompleted)
+            {
+                Debug.Log("Usuario eliminado exitosamente.");
+            }
+        });
+    }
 }
