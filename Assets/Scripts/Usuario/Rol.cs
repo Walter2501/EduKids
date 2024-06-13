@@ -8,6 +8,7 @@ public class Rol : MonoBehaviour
 {
     [SerializeField] private GameObject prefabUsuario;
     [SerializeField] private Transform container;
+    [SerializeField] private GameObject panelCargando;
     private FirebaseManager firebaseManager;
 
     private List<UsuarioBase> usuariosList = new List<UsuarioBase>();
@@ -60,6 +61,7 @@ public class Rol : MonoBehaviour
         if (firebaseManager != null)
         {
             int nuevoRol = dropdown.value;
+            panelCargando.SetActive(true);
             firebaseManager.CambiarRolUsuario(usuarioID, nuevoRol);
         }
         else
@@ -74,6 +76,7 @@ public class Rol : MonoBehaviour
         {
             if (firebaseManager != null)
             {
+                panelCargando.SetActive(true);
                 firebaseManager.EliminarUsuario(usuarioID);
             }
         }

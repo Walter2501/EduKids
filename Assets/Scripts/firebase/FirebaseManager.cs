@@ -5,6 +5,8 @@ using Firebase.Auth;
 using System.Collections.Generic;
 using UnityEngine;
 using Newtonsoft.Json;
+using UnityEngine.SceneManagement;
+using System.Collections;
 
 public class FirebaseManager : MonoBehaviour
 {
@@ -83,7 +85,6 @@ public class FirebaseManager : MonoBehaviour
                 foreach (DataSnapshot userSnapshot in snapshot.Children)
                 {
                     var usuario = JsonConvert.DeserializeObject<UsuarioBase>(userSnapshot.GetRawJsonValue());
-                    usuario.Nombre = userSnapshot.Key; // Set the key as the username
                     usuariosList.Add(usuario);
                 }
 
@@ -141,6 +142,8 @@ public class FirebaseManager : MonoBehaviour
                 }
             }
         });
+
+        StartCoroutine(ReiniciarEscena());
     }
 
     public void buscarUsuario(string usuarioID)
@@ -231,5 +234,17 @@ public class FirebaseManager : MonoBehaviour
                 Debug.Log("Usuario eliminado exitosamente.");
             }
         });
+
+        StartCoroutine(ReiniciarEscena());
+    }
+
+
+    //Esto es porque al  hacer un cambio no se nota en la escena
+    //con esto se reiniciar la escena luego de unos segunos
+    //reflejadno los cambios
+    private IEnumerator ReiniciarEscena() 
+    {
+        yield return new WaitForSeconds(1f);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 }
