@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Juego1 : JuegoBase
@@ -8,7 +9,29 @@ public class Juego1 : JuegoBase
     [SerializeField] private GameObject[] Manzanas;
     [SerializeField] private TextMeshProUGUI[] textosBotones;
     private int[] numeros = new int[6];
-    private int cantidadAleatoria = 0; //tambien la respuesta correcta
+    private int cantidadAleatoria = 0;
+    private bool fin = false;
+
+    public ProgresoUser progresoUser; // Referencia a ProgresoUser
+
+
+
+    private void Update()
+    {
+        if (fin)
+        {
+
+            OnLevelComplete();
+            fin = false; // Evitar múltiples llamadas
+        }
+    }
+
+    private void OnLevelComplete()
+    {
+        progresoUser.AgregarNivel(new Nivel { nombre = "Nivel 1", dificultad = progresoUser.getDificultad() });
+        progresoUser.SubirDificultad();
+
+    }
 
     protected override void IniciarJuego()
     {
@@ -21,33 +44,22 @@ public class Juego1 : JuegoBase
 
     private void EncenderManzanas(int cantidad)
     {
-
         for (int i = 0; i < Manzanas.Length; i++)
         {
-            if (i < cantidadAleatoria) Manzanas[i].SetActive(true);
-            else Manzanas[i].SetActive(false);
+            Manzanas[i].SetActive(i < cantidadAleatoria);
         }
     }
 
     private void GenerarNumeros()
     {
-        List<int> numerosDisponibles = Enumerable.Range(1, 10).ToList();
+        List<int> numerosDisponibles = new List<int>(Enumerable.Range(1, 10));
         numerosDisponibles.Remove(cantidadAleatoria);
 
-        List<int> numerosGenerados = new List<int>();
-
-
-        //Lambda
         numerosDisponibles = numerosDisponibles.OrderBy(x => Random.value).ToList();
 
         for (int i = 0; i < numeros.Length; i++)
         {
-            numerosGenerados.Add(numerosDisponibles[i]);
-        }
-
-        for (int i = 0; i < numerosGenerados.Count; i++)
-        {
-            numeros[i] = numerosGenerados[i];
+            numeros[i] = numerosDisponibles[i];
         }
 
         numeros[Random.Range(0, numeros.Length)] = cantidadAleatoria;
@@ -84,6 +96,7 @@ public class Juego1 : JuegoBase
                 if (vecesJugado > 5)
                 {
                     StartCoroutine(TerminarJuego());
+                    fin = true;
                 }
                 else
                 {
@@ -93,4 +106,5 @@ public class Juego1 : JuegoBase
             }
         }
     }
+
 }

@@ -50,6 +50,7 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
+
         Debug.Log($"Id: {usuarioID} - rol: {rol}");
     }
 
@@ -97,4 +98,8 @@ public class GameManager : MonoBehaviour
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
+
+
+
+
 }

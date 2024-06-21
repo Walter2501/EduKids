@@ -10,19 +10,25 @@ using System.Collections;
 
 public class FirebaseManager : MonoBehaviour
 {
+
     private DatabaseReference dbReference;
     private FirebaseAuth auth;
     private FirebaseUser user;
 
     public List<UsuarioBase> usuariosList = new List<UsuarioBase>();
-    public Rol rolScript; // Reference to the Rol script
+    private Rol rolScript; // Reference to the Rol script
 
     public FirebaseAuth GetFirebaseAuth()
     {
         return auth;
     }
 
-    private void Start()
+    private void Awake()
+    {
+        InitializeFirebase();
+    }
+
+    private void InitializeFirebase()
     {
         FirebaseApp.CheckAndFixDependenciesAsync().ContinueWithOnMainThread(task =>
         {
@@ -39,6 +45,7 @@ public class FirebaseManager : MonoBehaviour
             }
         });
     }
+
 
     private void SignInAnonymously()
     {
@@ -247,4 +254,30 @@ public class FirebaseManager : MonoBehaviour
         yield return new WaitForSeconds(1f);
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
+
+
+    public void GuardarProgresoUsuario(int valorActual, List<Nivel> nivelesCompletados, int dificultadActual)
+    {
+        var progresoData = new
+        {
+            valorActual = valorActual,
+            nivelesCompletados = nivelesCompletados,
+            dificultadActual = dificultadActual
+        };
+        string userID = $"{GameManager.Instance.estudiante.Nombre}{GameManager.Instance.estudiante.Apellido1}{GameManager.Instance.estudiante.Apellido2}";
+        string json = JsonConvert.SerializeObject(progresoData);
+        dbReference.Child("Usuarios").Child(userID).Child("Progreso").SetRawJsonValueAsync(json).ContinueWithOnMainThread(task =>
+        {
+            if (task.IsCompleted)
+            {
+                Debug.Log("Progreso guardado exitosamente.");
+            }
+            else
+            {
+                Debug.LogError("Error guardando el progreso: " + task.Exception);
+            }
+        });
+    }
+
+
 }
