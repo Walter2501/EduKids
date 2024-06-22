@@ -10,7 +10,13 @@ public class managerProgreso : MonoBehaviour
         firebaseManager = FindObjectOfType<FirebaseManager>();
         if (firebaseManager == null)
         {
-            Debug.LogError("FirebaseManager not found in scene!");
+            Debug.LogError("FirebaseManager no encontrado en la escena.");
+        }
+
+        progresoUser = FindObjectOfType<ProgresoUser>();
+        if (progresoUser == null)
+        {
+            Debug.LogError("ProgresoUser no encontrado en la escena.");
         }
     }
 
@@ -18,10 +24,13 @@ public class managerProgreso : MonoBehaviour
     {
         Nivel nivel = new Nivel { nombre = nombreNivel, dificultad = progresoUser.getDificultad() };
         progresoUser.AgregarNivel(nivel);
+        progresoUser.GuardarProgreso();
+
     }
 
     public void AumentarDificultad()
     {
         progresoUser.SubirDificultad();
+        progresoUser.GuardarProgreso();
     }
 }

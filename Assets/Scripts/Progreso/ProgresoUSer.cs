@@ -45,7 +45,7 @@ public class ProgresoUser : MonoBehaviour
     }
 
     // Método para guardar el progreso en Firebase
-    private void GuardarProgreso()
+    public void GuardarProgreso()
     {
         var firebaseManager = FindObjectOfType<FirebaseManager>();
         if (firebaseManager == null)

@@ -1,7 +1,7 @@
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class Juego1 : JuegoBase
@@ -10,28 +10,38 @@ public class Juego1 : JuegoBase
     [SerializeField] private TextMeshProUGUI[] textosBotones;
     private int[] numeros = new int[6];
     private int cantidadAleatoria = 0;
-    private bool fin = false;
 
     public ProgresoUser progresoUser; // Referencia a ProgresoUser
 
-
-
-    private void Update()
+    private void EnsureProgresoUserInitialized()
     {
-        if (fin)
+        if (progresoUser == null)
         {
-
-            OnLevelComplete();
-            fin = false; // Evitar múltiples llamadas
+            progresoUser = FindObjectOfType<ProgresoUser>();
+            if (progresoUser == null)
+            {
+                Debug.LogError("ProgresoUser no encontrado en EnsureProgresoUserInitialized.");
+            }
         }
     }
 
-    private void OnLevelComplete()
+    private IEnumerator OnLevelComplete()
     {
-        progresoUser.AgregarNivel(new Nivel { nombre = "Nivel 1", dificultad = progresoUser.getDificultad() });
-        progresoUser.SubirDificultad();
+        EnsureProgresoUserInitialized();
+        yield return new WaitForSeconds(1f);
 
+        if (progresoUser != null)
+        {
+            progresoUser.AgregarNivel(new Nivel { nombre = "Nivel 1", dificultad = progresoUser.getDificultad() });
+            progresoUser.SubirDificultad();
+            progresoUser.GuardarProgreso();
+        }
+        else
+        {
+            Debug.LogError("ProgresoUser no está asignado en OnLevelComplete.");
+        }
     }
+
 
     protected override void IniciarJuego()
     {
@@ -96,7 +106,7 @@ public class Juego1 : JuegoBase
                 if (vecesJugado > 5)
                 {
                     StartCoroutine(TerminarJuego());
-                    fin = true;
+                    StartCoroutine(OnLevelComplete());
                 }
                 else
                 {
@@ -106,5 +116,4 @@ public class Juego1 : JuegoBase
             }
         }
     }
-
 }

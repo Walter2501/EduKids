@@ -1,24 +1,24 @@
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
-using System;
 using UnityEngine.UI;
+using System;
 
 public class Rol : MonoBehaviour
 {
     [SerializeField] private GameObject prefabUsuario;
     [SerializeField] private Transform container;
     [SerializeField] private GameObject panelCargando;
-    private FirebaseManager firebaseManager;
+    private RolManager rolManager;
 
     private List<UsuarioBase> usuariosList = new List<UsuarioBase>();
 
     private void Start()
     {
-        firebaseManager = FindObjectOfType<FirebaseManager>();
-        if (firebaseManager == null)
+        rolManager = FindObjectOfType<RolManager>();
+        if (rolManager == null)
         {
-            Debug.LogError("FirebaseManager no encontrado en la escena.");
+            Debug.LogError("RolManager no encontrado en la escena.");
         }
     }
 
@@ -26,6 +26,7 @@ public class Rol : MonoBehaviour
     {
         usuariosList = usuarios;
         DibujarUsuarios();
+        panelCargando.SetActive(false);
     }
 
     private void DibujarUsuarios()
@@ -46,41 +47,44 @@ public class Rol : MonoBehaviour
             rolesDropdown.AddOptions(new List<string> { "Estudiante", "Padre", "Maestro" });
             rolesDropdown.value = usuario.Rol;
 
-            // Set callback for when the dropdown value changes
-            rolesDropdown.onValueChanged.AddListener((index) => OnRolesDropdownValueChanged(rolesDropdown, $"{usuario.Nombre}{usuario.Apellido1}{usuario.Apellido2}"));
-
+            rolesDropdown.onValueChanged.AddListener((index) => OnRolesDropdownValueChanged(rolesDropdown, usuario));
 
             Button eliminarButton = usuarioGO.GetComponentInChildren<Button>();
-            eliminarButton.onClick.AddListener(() => btnEliminar($"{usuario.Nombre}{usuario.Apellido1}{usuario.Apellido2}"));
+            eliminarButton.onClick.AddListener(() => btnEliminar(usuario));
         }
     }
 
-    // Método que se llama cuando cambia la selección del Dropdown
-    private void OnRolesDropdownValueChanged(TMP_Dropdown dropdown, string usuarioID)
+    private void OnRolesDropdownValueChanged(TMP_Dropdown dropdown, UsuarioBase usuario)
     {
-        if (firebaseManager != null)
+        if (rolManager != null)
         {
             int nuevoRol = dropdown.value;
             panelCargando.SetActive(true);
-            firebaseManager.CambiarRolUsuario(usuarioID, nuevoRol);
+            GameObject usuarioGO = Instantiate(prefabUsuario, container);
+            TextMeshProUGUI nombreText = usuarioGO.GetComponentInChildren<TextMeshProUGUI>();
+            nombreText.text = $"{usuario.Nombre}{usuario.Apellido1}{usuario.Apellido2}";
+            rolManager.CambiarRolUsuario(nombreText.text, nuevoRol); // Usar Id en lugar de concatenar el nombre
         }
         else
         {
-            Debug.LogError("FirebaseManager es nulo.");
+            Debug.LogError("RolManager es nulo.");
         }
     }
 
-    private void btnEliminar(string usuarioID)
+    private void btnEliminar(UsuarioBase usuario)
     {
         try
         {
-            if (firebaseManager != null)
+            if (rolManager != null)
             {
                 panelCargando.SetActive(true);
-                firebaseManager.EliminarUsuario(usuarioID);
+                GameObject usuarioGO = Instantiate(prefabUsuario, container);
+                TextMeshProUGUI nombreText = usuarioGO.GetComponentInChildren<TextMeshProUGUI>();
+                nombreText.text = $"{usuario.Nombre}{usuario.Apellido1}{usuario.Apellido2}";
+                rolManager.EliminarUsuario(nombreText.text); // Usar Id en lugar de concatenar el nombre
             }
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             Debug.LogError($"El error es: {e}");
         }

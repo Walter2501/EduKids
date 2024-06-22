@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using System.Collections;
 
 public class juego2 : JuegoBase
 {
@@ -11,6 +12,42 @@ public class juego2 : JuegoBase
     private int[] inferior;
     private int[] superior;
     private string respuestaCorrecta = "";
+
+
+
+    public ProgresoUser progresoUser; // Referencia a ProgresoUser
+
+    private void EnsureProgresoUserInitialized()
+    {
+        if (progresoUser == null)
+        {
+            progresoUser = FindObjectOfType<ProgresoUser>();
+            if (progresoUser == null)
+            {
+                Debug.LogError("ProgresoUser no encontrado en EnsureProgresoUserInitialized.");
+            }
+        }
+    }
+
+    private IEnumerator OnLevelComplete()
+    {
+        EnsureProgresoUserInitialized();
+        yield return new WaitForSeconds(1f);
+
+        if (progresoUser != null)
+        {
+            progresoUser.AgregarNivel(new Nivel { nombre = "Nivel 2", dificultad = progresoUser.getDificultad() });
+            progresoUser.SubirDificultad();
+            progresoUser.GuardarProgreso();
+        }
+        else
+        {
+            Debug.LogError("ProgresoUser no está asignado en OnLevelComplete.");
+        }
+    }
+
+
+
 
     protected override void IniciarJuego()
     {
@@ -118,6 +155,7 @@ public class juego2 : JuegoBase
         if (vecesJugado > 5)
         {
             StartCoroutine(TerminarJuego());
+            StartCoroutine(OnLevelComplete());
         }
         else
         {

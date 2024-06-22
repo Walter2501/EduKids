@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -9,6 +10,19 @@ public class juego3 : JuegoBase
     [SerializeField] private TextMeshProUGUI[] txtRpt;
 
     private string respuestaCorrecta = "";
+
+    public ProgresoUser progresoUser; // Referencia a ProgresoUser
+
+    private IEnumerator OnLevelComplete()
+    {
+        // Espera un segundo antes de ejecutar OnLevelComplete()
+        yield return new WaitForSeconds(1f);
+
+        // Actualizar el progreso solo si se ha completado el nivel
+        progresoUser.AgregarNivel(new Nivel { nombre = "Nivel 3", dificultad = progresoUser.getDificultad() });
+        progresoUser.SubirDificultad();
+    }
+
 
     protected override void IniciarJuego()
     {
@@ -96,6 +110,7 @@ public class juego3 : JuegoBase
         if (vecesJugado > 5)
         {
             StartCoroutine(TerminarJuego());
+            StartCoroutine(OnLevelComplete());
         }
         else
         {

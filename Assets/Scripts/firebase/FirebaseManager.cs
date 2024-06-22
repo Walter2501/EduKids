@@ -10,13 +10,16 @@ using System.Collections;
 
 public class FirebaseManager : MonoBehaviour
 {
-
     private DatabaseReference dbReference;
     private FirebaseAuth auth;
     private FirebaseUser user;
 
     public List<UsuarioBase> usuariosList = new List<UsuarioBase>();
     private Rol rolScript; // Reference to the Rol script
+    public Rol RolScript
+    {
+        set { rolScript = value; }
+    }
 
     public FirebaseAuth GetFirebaseAuth()
     {
@@ -45,7 +48,6 @@ public class FirebaseManager : MonoBehaviour
             }
         });
     }
-
 
     private void SignInAnonymously()
     {
@@ -78,7 +80,7 @@ public class FirebaseManager : MonoBehaviour
         });
     }
 
-    private void LoadUsuarios()
+    public void LoadUsuarios()
     {
         dbReference.Child("Usuarios").GetValueAsync().ContinueWithOnMainThread(task =>
         {
@@ -100,15 +102,14 @@ public class FirebaseManager : MonoBehaviour
                 {
                     rolScript.OnUsuariosLoaded(usuariosList);
                 }
-                else
-                {
-                    Debug.LogError("Rol script reference is not set in FirebaseManager.");
-                }
+                //else
+                //{
+                //    Debug.LogError("Rol script reference is not set in FirebaseManager.");
+                //}
             }
         });
     }
 
-    // Method to change the role of a user
     public void CambiarRolUsuario(string usuarioID, int nuevoRol)
     {
         Debug.Log($"Intentando cambiar el rol del usuario: {usuarioID} a {nuevoRol}");
@@ -203,8 +204,6 @@ public class FirebaseManager : MonoBehaviour
         });
     }
 
-
-
     public void EliminarUsuario(string usuarioID)
     {
         Debug.Log($"Intentando eliminar el usuario: {usuarioID} ");
@@ -214,7 +213,6 @@ public class FirebaseManager : MonoBehaviour
         //Como el codigo se genera en base al usuarioId en lugar de buscarlo
         //puedo volver a generarlo
         string userCode = UniqueCodeGenerator.GenerateCode(usuarioID);
-
 
         //Si no hay codigo porque no todos los usuarios tienen (los padres) simplemente este no hará nada
         dbReference.Child("Codigos").Child(userCode).RemoveValueAsync().ContinueWith(task =>
@@ -245,16 +243,14 @@ public class FirebaseManager : MonoBehaviour
         StartCoroutine(ReiniciarEscena());
     }
 
-
     //Esto es porque al  hacer un cambio no se nota en la escena
     //con esto se reiniciar la escena luego de unos segunos
     //reflejadno los cambios
-    private IEnumerator ReiniciarEscena() 
+    private IEnumerator ReiniciarEscena()
     {
         yield return new WaitForSeconds(1f);
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
-
 
     public void GuardarProgresoUsuario(int valorActual, List<Nivel> nivelesCompletados, int dificultadActual)
     {
@@ -277,7 +273,6 @@ public class FirebaseManager : MonoBehaviour
                 Debug.LogError("Error guardando el progreso: " + task.Exception);
             }
         });
+
     }
-
-
 }
