@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 //Roles:
 //0 = Estudiante
@@ -13,8 +14,10 @@ public class UsuarioBase
     public string Apellido2;
     public string Password;
     public int Rol;
+    public Progreso Progreso;
 
     public UsuarioBase() { }
+
     public UsuarioBase(string nombre, string apellido1, string apellido2, string password)
     {
         Nombre = nombre;
@@ -22,4 +25,21 @@ public class UsuarioBase
         Apellido2 = apellido2;
         Password = password;
     }
+
+    public UsuarioBase(string nombre, string apellido1, string apellido2, string password, int rol, Progreso progreso)
+    {
+        Nombre = nombre;
+        Apellido1 = apellido1;
+        Apellido2 = apellido2;
+        Password = password;
+        Rol = rol;
+        Progreso = progreso;
+    }
+}
+
+[Serializable]
+public class Progreso
+{
+    public int dificultad;
+    public List<Nivel> niveles;
 }

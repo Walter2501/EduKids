@@ -14,6 +14,7 @@ public class FirebaseManager : MonoBehaviour
     private FirebaseAuth auth;
     private FirebaseUser user;
 
+    private ProgresoVista progresoVista;
     public List<UsuarioBase> usuariosList = new List<UsuarioBase>();
     private Rol rolScript; // Reference to the Rol script
     public Rol RolScript
@@ -96,6 +97,8 @@ public class FirebaseManager : MonoBehaviour
                     var usuario = JsonConvert.DeserializeObject<UsuarioBase>(userSnapshot.GetRawJsonValue());
                     usuariosList.Add(usuario);
                 }
+
+                progresoVista.OnUsuariosLoaded(usuariosList);
 
                 // Notify Rol script
                 if (rolScript != null)

@@ -5,6 +5,8 @@ public class RolManager : MonoBehaviour
 {
     public FirebaseManager firebaseManager;
     public Rol rolScript;
+    //public ProgresoVista progresoVista;
+
 
     private List<UsuarioBase> usuariosList = new List<UsuarioBase>();
 
@@ -27,11 +29,12 @@ public class RolManager : MonoBehaviour
         }
     }
 
-    public void OnUsuariosLoaded(List<UsuarioBase> usuarios)
-    {
-        usuariosList = usuarios;
-        rolScript.OnUsuariosLoaded(usuarios); // Pasar los usuarios cargados a la UI
-    }
+    //public void OnUsuariosLoaded(List<UsuarioBase> usuarios)
+    //{
+    //    usuariosList = usuarios;
+    //    rolScript.OnUsuariosLoaded(usuarios); // Pasar los usuarios cargados a la UI
+    //    //progresoVista.OnUsuariosLoaded(usuarios);
+    //}
 
     public void CambiarRolUsuario(string usuarioID, int nuevoRol)
     {
