@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -5,25 +6,22 @@ using UnityEngine;
 
 public class ProgresoVista : MonoBehaviour
 {
+    // Start is called before the first frame update
     [SerializeField] private GameObject prefabUsuario;
     [SerializeField] private Transform container;
 
+    private ProgresoVistaManager progresoVistaManager;
 
     private List<UsuarioBase> usuariosList = new List<UsuarioBase>();
     // Start is called before the first frame update
 
-    public FirebaseManager firebaseManager;
 
     void Start()
     {
-        firebaseManager = FindObjectOfType<FirebaseManager>();
-        if (firebaseManager == null)
+        progresoVistaManager = FindObjectOfType<ProgresoVistaManager>();
+        if (progresoVistaManager == null)
         {
-            Debug.LogError("RolManager no encontrado en la escena.");
-        }
-        else
-        {
-            firebaseManager.LoadUsuarios(); // Cargar usuarios en el inicio
+            Debug.LogError("ProgresoVistaManager no encontrado en la escena.");
         }
     }
 
@@ -46,14 +44,7 @@ public class ProgresoVista : MonoBehaviour
         foreach (var usuario in usuariosList)
         {
             GameObject usuarioGO = Instantiate(prefabUsuario, container);
-            //TextMeshProUGUI nombreText = usuarioGO.GetComponentInChildren<TextMeshProUGUI>();
-            //nombreText.text = $"{usuario.Nombre} {usuario.Apellido1} {usuario.Apellido2}";
 
-            //TextMeshProUGUI dificultad = usuarioGO.GetComponentInChildren<TextMeshProUGUI>();
-            //dificultad.text = $"{usuario.Progreso.dificultad}";
-
-            //TextMeshProUGUI completado = usuarioGO.GetComponentInChildren<TextMeshProUGUI>();
-            //completado.text = $"{usuario.Progreso.niveles}";
 
             TextMeshProUGUI[] texts = usuarioGO.GetComponentsInChildren<TextMeshProUGUI>();
 
@@ -66,11 +57,23 @@ public class ProgresoVista : MonoBehaviour
                 }
                 else if (text.name == "DificultadText")
                 {
-                    text.text = $"{usuario.Progreso.dificultad}";
+                    if(usuario.Progreso.dificultad <= 1)
+                    {
+                        text.text = $"Dificultad Actual: Facil";
+                    } else if(usuario.Progreso.dificultad == 2)
+                    {
+                        text.text = $"Dificultad Actual: Media";
+                    }
+                    else
+                    {
+                        text.text = $"Dificultad Actual: Dificil";
+                    }
                 }
                 else if (text.name == "CompletadoText")
                 {
-                    text.text = $"{usuario.Progreso.niveles}";
+                    //Debug.Log(usuario.Progreso.niveles);
+
+                    text.text = $"Niveles Completados:{ usuario.Progreso.niveles.Count + 1}";
                 }
             }
 

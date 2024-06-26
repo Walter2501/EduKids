@@ -42,4 +42,19 @@ public class Progreso
 {
     public int dificultad;
     public List<Nivel> niveles;
+
+    public Progreso()
+    {
+        niveles = new List<Nivel>();
+    }
+}
+
+
+[Serializable]
+public class Nivel
+{
+
+    public string nombre;
+    public int dificultad;
+
 }

@@ -58,12 +58,3 @@ public class ProgresoUser : MonoBehaviour
     }
 }
 
-
-[Serializable]
-public class Nivel
-{
-
-    public string nombre;
-    public int dificultad;
-
-}

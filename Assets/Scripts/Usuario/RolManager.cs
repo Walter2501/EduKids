@@ -8,7 +8,6 @@ public class RolManager : MonoBehaviour
     //public ProgresoVista progresoVista;
 
 
-    private List<UsuarioBase> usuariosList = new List<UsuarioBase>();
 
     private void Start()
     {

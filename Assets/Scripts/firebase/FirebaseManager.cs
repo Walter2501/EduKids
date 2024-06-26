@@ -17,6 +17,11 @@ public class FirebaseManager : MonoBehaviour
     private ProgresoVista progresoVista;
     public List<UsuarioBase> usuariosList = new List<UsuarioBase>();
     private Rol rolScript; // Reference to the Rol script
+
+    public ProgresoVista ProgresoVista
+    {
+        set { progresoVista = value;  }
+    }
     public Rol RolScript
     {
         set { rolScript = value; }
@@ -98,12 +103,17 @@ public class FirebaseManager : MonoBehaviour
                     usuariosList.Add(usuario);
                 }
 
-                progresoVista.OnUsuariosLoaded(usuariosList);
+
+                if(progresoVista != null)
+                {
+                    progresoVista.OnUsuariosLoaded(usuariosList);
+
+                }
 
                 // Notify Rol script
                 if (rolScript != null)
                 {
-                    rolScript.OnUsuariosLoaded(usuariosList);
+                   rolScript.OnUsuariosLoaded(usuariosList);
                 }
                 //else
                 //{
