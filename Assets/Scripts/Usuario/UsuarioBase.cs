@@ -40,12 +40,12 @@ public class UsuarioBase
 [Serializable]
 public class Progreso
 {
-    public int dificultad;
-    public List<Nivel> niveles;
+    public int dificultadActual;
+    public List<Nivel> nivelesCompletados;
 
     public Progreso()
     {
-        niveles = new List<Nivel>();
+        nivelesCompletados = new List<Nivel>();
     }
 }
 

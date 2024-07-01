@@ -43,6 +43,8 @@ public class ProgresoVista : MonoBehaviour
 
         foreach (var usuario in usuariosList)
         {
+            Debug.Log(JsonUtility.ToJson(usuario.Progreso));  // Para ver la estructura completa de Progreso
+
             GameObject usuarioGO = Instantiate(prefabUsuario, container);
 
 
@@ -57,10 +59,10 @@ public class ProgresoVista : MonoBehaviour
                 }
                 else if (text.name == "DificultadText")
                 {
-                    if(usuario.Progreso.dificultad <= 1)
+                    if(usuario.Progreso.dificultadActual <= 1)
                     {
                         text.text = $"Dificultad Actual: Facil";
-                    } else if(usuario.Progreso.dificultad == 2)
+                    } else if(usuario.Progreso.dificultadActual == 2)
                     {
                         text.text = $"Dificultad Actual: Media";
                     }
@@ -71,9 +73,10 @@ public class ProgresoVista : MonoBehaviour
                 }
                 else if (text.name == "CompletadoText")
                 {
-                    //Debug.Log(usuario.Progreso.niveles);
+                  //  Debug.Log(usuario.Progreso.nivelesCompletados);
+                    //Debug.Log(usuario.Progreso);
 
-                    text.text = $"Niveles Completados:{ usuario.Progreso.niveles.Count + 1}";
+                    text.text = $"Niveles Completados:{usuario.Progreso.nivelesCompletados.Count}";
                 }
             }
 
