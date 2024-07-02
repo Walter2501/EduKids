@@ -53,4 +53,10 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/juegos/juego7.unity
     guid: d0db90c1ff85d7440ab0c20cdad4e721
+  - enabled: 1
+    path: Assets/Scenes/Menu/RutaVista.unity
+    guid: 5a01712e2f9f6ac40b51b056d8d4cea2
+  - enabled: 1
+    path: Assets/Scenes/Progreso/ProgresoVista.unity
+    guid: b0c73a4555488b847b08e83ee89a1211
   m_configObjects: {}

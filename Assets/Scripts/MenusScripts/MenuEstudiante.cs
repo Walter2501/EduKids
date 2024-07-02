@@ -8,6 +8,7 @@ public class MenuEstudiante : MonoBehaviour
 {
     public TextMeshProUGUI nombreText;
     public TextMeshProUGUI meritosText;
+    public Button ruta;
     public Button actividades;
     public Button recompensas;
 
@@ -16,6 +17,7 @@ public class MenuEstudiante : MonoBehaviour
         //Asigno las funciones a cada boton
         recompensas.onClick.AddListener(IrRecompensas);
         actividades.onClick.AddListener(IrActividades);
+        ruta.onClick.AddListener(IrRuta);
         //Pongo el nombre del maestro
         nombreText.text = $"{GameManager.Instance.estudiante.Nombre} {GameManager.Instance.estudiante.Apellido1}";
         meritosText.text = $"Méritos: {GameManager.Instance.estudiante.Meritos}";
@@ -29,5 +31,10 @@ public class MenuEstudiante : MonoBehaviour
     public void IrRecompensas()
     {
         GameManager.Instance.CambiarEscena("tienda");
+    }
+
+    public void IrRuta()
+    {
+        GameManager.Instance.CambiarEscena("RutaVista");
     }
 }
