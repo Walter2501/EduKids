@@ -587,6 +587,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 97dc122d1b6c2f04baef61409bf33156, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  dificultadActual: 0
   facil: {fileID: 1955170732}
   intermedio: {fileID: 1899444571}
   dificil: {fileID: 437270406}

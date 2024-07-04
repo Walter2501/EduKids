@@ -10,7 +10,8 @@ public class GestionEstudiantes : MonoBehaviour
     [SerializeField] private GameObject prefab;
     [SerializeField] private Transform container;
     [SerializeField] private Button botonVolver;
-    [SerializeField] private TextMeshProUGUI codigo ;
+    [SerializeField] private TextMeshProUGUI codigo;
+    [SerializeField] private GameObject cargando;
 
     private List<string> estudiantesID = new List<string>();
 
@@ -28,9 +29,10 @@ public class GestionEstudiantes : MonoBehaviour
         for (int i = 0; i < estudiantesID.Count; i++) //si hay estudiantes hace esto por cada uno
         {
             GameObject newObj = Instantiate(prefab, container); //crea el prefab
-            EstudianteNombrePrefab newEstudent = newObj.GetComponent<EstudianteNombrePrefab>(); //consigue su script
+            PrefabEstudianteGestion newEstudent = newObj.GetComponent<PrefabEstudianteGestion>(); //consigue su script
             newEstudent.SetName(estudiantesID[i]); //le manda al prefab el userID del estudiante
         }
+        cargando.SetActive(false);
     }
 
     public void Volver()

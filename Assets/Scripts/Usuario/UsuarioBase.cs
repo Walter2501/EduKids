@@ -14,9 +14,6 @@ public class UsuarioBase
     public string Apellido2;
     public string Password;
     public int Rol;
-    public Progreso Progreso;
-
-    public UsuarioBase() { }
 
     public UsuarioBase(string nombre, string apellido1, string apellido2, string password)
     {
@@ -25,36 +22,4 @@ public class UsuarioBase
         Apellido2 = apellido2;
         Password = password;
     }
-
-    public UsuarioBase(string nombre, string apellido1, string apellido2, string password, int rol, Progreso progreso)
-    {
-        Nombre = nombre;
-        Apellido1 = apellido1;
-        Apellido2 = apellido2;
-        Password = password;
-        Rol = rol;
-        Progreso = progreso;
-    }
-}
-
-[Serializable]
-public class Progreso
-{
-    public int dificultadActual;
-    public List<Nivel> nivelesCompletados;
-
-    public Progreso()
-    {
-        nivelesCompletados = new List<Nivel>();
-    }
-}
-
-
-[Serializable]
-public class Nivel
-{
-
-    public string nombre;
-    public int dificultad;
-
 }

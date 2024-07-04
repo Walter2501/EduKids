@@ -64,7 +64,10 @@ public class LoginMenu : MonoBehaviour
                     GameManager.Instance.estudiante = JsonConvert.DeserializeObject<Estudiante>(jsonData);
                     GameManager.Instance.CambiarEscena("MenuEstudiante");
                     break;
-
+                case 1:
+                    GameManager.Instance.padre = JsonConvert.DeserializeObject<Padre>(jsonData);
+                    GameManager.Instance.CambiarEscena("MenuPadre");
+                    break;
                 case 2:
                     GameManager.Instance.maestro = JsonConvert.DeserializeObject<Maestro>(jsonData);
                     GameManager.Instance.CambiarEscena("MenuProfesor");
@@ -209,6 +212,28 @@ public class LoginMenu : MonoBehaviour
                 GameManager.Instance.CambiarEscena("MenuEstudiante"); //cambia a la escena estudiante
             }
         }
+        else if (rol == 1)
+        {
+            Padre newPadre = new Padre(nombre, apellido1, apellido2, password);
+
+            string json = JsonConvert.SerializeObject(newPadre);
+            var serverToRegister = GameManager.Instance.database.Child("Usuarios").Child(userID).SetRawJsonValueAsync(json);
+
+            yield return new WaitUntil(() => serverToRegister.IsCompleted);
+
+            if (serverToRegister.IsFaulted)
+            {
+                Debug.LogError("Error al registrar usuario: " + serverToRegister.Exception);
+            }
+            else
+            {
+                Debug.Log("Usuario registrado correctamente");
+                GameManager.Instance.SetUserID(userID);
+                GameManager.Instance.SetRol(rol);
+                GameManager.Instance.padre = newPadre;
+                GameManager.Instance.CambiarEscena("MenuPadre");
+            }
+        }
         else if (rol == 2)
         {
             Maestro newMaestro = new Maestro(nombre, apellido1, apellido2, password, code);
@@ -283,6 +308,11 @@ public class LoginMenu : MonoBehaviour
         {
             GameManager.Instance.estudiante = JsonConvert.DeserializeObject<Estudiante>(jsonData); // ahora si se guarda como el rol correspondiente
             GameManager.Instance.CambiarEscena("MenuEstudiante");
+        }
+        if (dataTemp.Rol == 1)
+        {
+            GameManager.Instance.padre = JsonConvert.DeserializeObject<Padre>(jsonData); // ahora si se guarda como el rol correspondiente
+            GameManager.Instance.CambiarEscena("MenuPadre");
         }
         else if (dataTemp.Rol == 2)
         {

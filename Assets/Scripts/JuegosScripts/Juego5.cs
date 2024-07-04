@@ -87,6 +87,7 @@ public class Juego5 : JuegoBase
                 {
                     audioSource.clip = win;
                     audioSource.Play();
+                    respuestasCorrectas++;
                     puntosTotales += puntosPorRespuestaCorrecta;
                 }
 
@@ -97,8 +98,9 @@ public class Juego5 : JuegoBase
                 }
                 base.BotonOpcion(texto);
                 vecesJugado++;
-                if (vecesJugado > 5)
+                if (vecesJugado > maxVecesJugado)
                 {
+                    CheckIfSubirDificultad(5);
                     StartCoroutine(TerminarJuego());
                 }
                 else

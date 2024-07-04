@@ -15,6 +15,8 @@ public class JuegoBase : MonoBehaviour
     [SerializeField] protected int puntosPorRespuestaCorrecta;
 
     protected int puntosTotales = 0;
+    protected int maxVecesJugado = 0;
+    protected int respuestasCorrectas = 0;
     protected int vecesJugado = 1;
     protected bool enEspera = false;
     protected AudioSource audioSource;
@@ -26,6 +28,10 @@ public class JuegoBase : MonoBehaviour
 
     protected void Start()
     {
+        if (GameManager.Instance.dificultadJuego == 1) maxVecesJugado = 5;
+        else if (GameManager.Instance.dificultadJuego == 2) maxVecesJugado = 10;
+        else maxVecesJugado = 20;
+
         IniciarJuego();
     }
 
@@ -39,12 +45,57 @@ public class JuegoBase : MonoBehaviour
         enEspera = true;
     }
 
+    protected void CheckIfSubirDificultad(int gameNumber)
+    {
+
+        int dificultadMaxAlcanzada = GameManager.Instance.estudiante.progreso.GetDificultadMax(gameNumber);
+        if (dificultadMaxAlcanzada > 2) return;
+        
+        float porcentajeRespuestasCorrectas = (float)respuestasCorrectas / maxVecesJugado;
+        Debug.Log(porcentajeRespuestasCorrectas);
+        if (porcentajeRespuestasCorrectas > 0.8f || Mathf.Approximately(porcentajeRespuestasCorrectas, 0.8f))
+        {
+            int dificultadJuego = GameManager.Instance.dificultadJuego;
+            if (dificultadMaxAlcanzada == dificultadJuego)
+            {
+                Debug.Log("Dentro");
+                GameManager.Instance.estudiante.progreso.SubirDificultadMaximaAlcanzada(gameNumber);
+            }
+        }
+    }
+
 
     protected IEnumerator TerminarJuego()
     {
         panelCargando.SetActive(true);
         yield return new WaitForSeconds(0.75f);
+        int dificultadJuego = GameManager.Instance.dificultadJuego;
+        float puntosFloat = puntosTotales;
+        if (respuestasCorrectas == maxVecesJugado)
+        {
+            switch (dificultadJuego)
+            {
+                case 1:
+                    puntosFloat *= 1.25f;
+                    break;
+                case 2:
+                    puntosFloat *= 1.5f;
+                    break;
+                case 3:
+                    puntosFloat *= 1.75f;
+                    break;
+            }
+            puntosTotales = (int) puntosFloat;
+        }
         GameManager.Instance.estudiante.Meritos += puntosTotales;
+        NivelCompletado newNivel = new NivelCompletado(GameManager.Instance.nombreJuego, GameManager.Instance.dificultadJuego, $"{respuestasCorrectas}/{maxVecesJugado}"); 
+        //Esto para que la lista no sea más larga que 20
+        if (GameManager.Instance.estudiante.nivelesCompletados.Count >= 20)
+        {
+            GameManager.Instance.estudiante.nivelesCompletados.RemoveAt(0);
+        }
+        GameManager.Instance.estudiante.nivelesCompletados.Add(newNivel);
+
         var serverData = GameManager.Instance.database.Child("Usuarios").Child(GameManager.Instance.usuarioID).GetValueAsync(); //revisa si existe el usuario
         yield return new WaitUntil(predicate: () => serverData.IsCompleted); //se espera a que termine la consulta
 

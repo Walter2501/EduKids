@@ -38,12 +38,19 @@ public class GameManager : MonoBehaviour
 
     public DatabaseReference database; //guarda la referencia del database
 
-    public Estudiante estudiante = null; //solo se llenara el del rol, los dem�s se quedaran vacios
+    public Estudiante estudiante = null; //solo se llenara el del rol, los demas se quedaran vacios, excepto en algunos casos
     public Maestro maestro = null;
+    public Padre padre = null;
+
+    //Se usa para el progreso de los juegos
+    public int dificultadJuego = 0;
+    public string nombreJuego = "";
+
 
     private void Awake()
     {
         instance = this;
+        FirebaseDatabase.DefaultInstance.SetPersistenceEnabled(false);
         database = FirebaseDatabase.DefaultInstance.RootReference;
         DontDestroyOnLoad(this.gameObject);
     }
@@ -77,6 +84,12 @@ public class GameManager : MonoBehaviour
         PlayerPrefs.Save();
     }
 
+    public void SetEstudianteUserID(string profesorID)
+    {
+        PlayerPrefs.SetString(ESTUDIANTEID_KEY, profesorID);
+        PlayerPrefs.Save();
+    }
+
     public void SetRol(int newRol)
     {
         PlayerPrefs.SetInt(ROL_KEY, newRol);
@@ -94,12 +107,15 @@ public class GameManager : MonoBehaviour
         SceneManager.LoadScene(NombreEscena);
     }
 
-    public void ReiniciarEscenaActual()
+    public void ReiniciarEscenaActual(float delaySegundos = 0f)
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        if (delaySegundos > 0f) StartCoroutine(ReiniciarEscenaActualDelay(delaySegundos));
+
+        else SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
-
-
-
+    private IEnumerator ReiniciarEscenaActualDelay(float tiempo)
+    {
+        yield return new WaitForSeconds(tiempo);
+    }
 }

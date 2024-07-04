@@ -104,11 +104,11 @@ public class FirebaseManager : MonoBehaviour
                 }
 
 
-                if(progresoVista != null)
+                /*if(progresoVista != null)
                 {
                     progresoVista.OnUsuariosLoaded(usuariosList);
 
-                }
+                }*/
 
                 // Notify Rol script
                 if (rolScript != null)
@@ -265,7 +265,7 @@ public class FirebaseManager : MonoBehaviour
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
-    public void GuardarProgresoUsuario(int valorActual, List<Nivel> nivelesCompletados, int dificultadActual)
+    public void GuardarProgresoUsuario(int valorActual, List<NivelCompletado> nivelesCompletados, int dificultadActual)
     {
         var progresoData = new
         {

@@ -60,6 +60,7 @@ public class JuegoFiguras : JuegoBase
         {
             audioSource.clip = win;
             audioSource.Play();
+            respuestasCorrectas++;
             puntosTotales += puntosPorRespuestaCorrecta;
         }
 
@@ -69,8 +70,9 @@ public class JuegoFiguras : JuegoBase
             audioSource.Play();
         }
         vecesJugado++;
-        if (vecesJugado > 5)
+        if (vecesJugado > maxVecesJugado)
         {
+            CheckIfSubirDificultad(4);
             StartCoroutine(TerminarJuego());
         }
         else

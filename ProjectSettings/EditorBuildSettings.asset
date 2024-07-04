@@ -57,6 +57,12 @@ EditorBuildSettings:
     path: Assets/Scenes/Menu/RutaVista.unity
     guid: 5a01712e2f9f6ac40b51b056d8d4cea2
   - enabled: 1
-    path: Assets/Scenes/Progreso/ProgresoVista.unity
+    path: Assets/Scenes/Progreso/ProgresoEstudiante.unity
     guid: b0c73a4555488b847b08e83ee89a1211
+  - enabled: 1
+    path: Assets/Scenes/Progreso/ProgresoVistaProfesor.unity
+    guid: ea1e2058330c12f4da9f905f43b0fe56
+  - enabled: 1
+    path: Assets/Scenes/Menu/MenuPadre.unity
+    guid: 66fee1fb145dd8943af628c750197e8f
   m_configObjects: {}

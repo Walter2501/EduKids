@@ -70,6 +70,7 @@ public class JuegoReloj : JuegoBase
         {
             audioSource.clip = win;
             audioSource.Play();
+            respuestasCorrectas++;
             puntosTotales += puntosPorRespuestaCorrecta;
         }
         else
@@ -79,8 +80,9 @@ public class JuegoReloj : JuegoBase
         }
 
         vecesJugado++;
-        if (vecesJugado > 5)
+        if (vecesJugado > maxVecesJugado)
         {
+            CheckIfSubirDificultad(6);
             StartCoroutine(TerminarJuego());
         }
         else

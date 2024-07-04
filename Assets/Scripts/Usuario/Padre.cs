@@ -2,17 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Padre : MonoBehaviour
+public class Padre : UsuarioBase
 {
-    // Start is called before the first frame update
-    void Start()
+    public Padre(string nombre, string apellido1, string apellido2, string password) : base(nombre, apellido1, apellido2, password)
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        Rol = 1;
     }
 }

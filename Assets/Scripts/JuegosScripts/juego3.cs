@@ -11,19 +11,6 @@ public class juego3 : JuegoBase
 
     private string respuestaCorrecta = "";
 
-    public ProgresoUser progresoUser; // Referencia a ProgresoUser
-
-    private IEnumerator OnLevelComplete()
-    {
-        // Espera un segundo antes de ejecutar OnLevelComplete()
-        yield return new WaitForSeconds(1f);
-
-        // Actualizar el progreso solo si se ha completado el nivel
-        progresoUser.AgregarNivel(new Nivel { nombre = "Nivel 3", dificultad = progresoUser.getDificultad() });
-        progresoUser.SubirDificultad();
-    }
-
-
     protected override void IniciarJuego()
     {
         CalcularSuma();
@@ -99,6 +86,7 @@ public class juego3 : JuegoBase
         {
             audioSource.clip = win;
             audioSource.Play();
+            respuestasCorrectas++;
             puntosTotales += puntosPorRespuestaCorrecta;
         }
         else
@@ -107,10 +95,10 @@ public class juego3 : JuegoBase
             audioSource.Play();
         }
         vecesJugado++;
-        if (vecesJugado > 5)
+        if (vecesJugado > maxVecesJugado)
         {
+            CheckIfSubirDificultad(3);
             StartCoroutine(TerminarJuego());
-            StartCoroutine(OnLevelComplete());
         }
         else
         {
