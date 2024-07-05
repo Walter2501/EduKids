@@ -10,6 +10,7 @@ public class MenuEstudiante : MonoBehaviour
     public TextMeshProUGUI meritosText;
     public Button actividades;
     public Button recompensas;
+    public Button desafios;
     public Button progreso;
 
     private void Start()
@@ -21,6 +22,14 @@ public class MenuEstudiante : MonoBehaviour
         //Pongo el nombre del maestro
         nombreText.text = $"{GameManager.Instance.estudiante.Nombre} {GameManager.Instance.estudiante.Apellido1}";
         meritosText.text = $"Méritos: {GameManager.Instance.estudiante.Meritos}";
+        if (GameManager.Instance.desafio != null)
+        {
+            if (GameManager.Instance.desafio.completado == false)
+            {
+                desafios.interactable = true;
+                desafios.onClick.AddListener(EmpezarDesafio);
+            }
+        }
     }
 
     public void IrActividades()
@@ -36,5 +45,12 @@ public class MenuEstudiante : MonoBehaviour
     public void IrProgreso()
     {
         GameManager.Instance.CambiarEscena("ProgresoEstudiante");
+    }
+
+    public void EmpezarDesafio()
+    {
+        GameManager.Instance.jugarDesafio = true;
+        GameManager.Instance.juegosJugados++;
+        GameManager.Instance.CambiarEscena(GameManager.Instance.desafio.juegosName[GameManager.Instance.juegosJugados-1]);
     }
 }

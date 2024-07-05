@@ -46,6 +46,11 @@ public class GameManager : MonoBehaviour
     public int dificultadJuego = 0;
     public string nombreJuego = "";
 
+    //Se usa para el desafioDiario
+    public Desafio desafio = null;
+    public bool jugarDesafio = false;
+    public int puntosHastaAhora = 0;
+    public int juegosJugados = 0;
 
     private void Awake()
     {
@@ -57,7 +62,6 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-
         Debug.Log($"Id: {usuarioID} - rol: {rol}");
     }
 
@@ -68,6 +72,10 @@ public class GameManager : MonoBehaviour
         {
             PlayerPrefs.DeleteKey(USUARIOID_KEY);
             PlayerPrefs.DeleteKey(ROL_KEY);
+        }
+        if (Input.GetKeyDown(KeyCode.F11))
+        {
+            DesafioDiario.PonerDiaAnterior();
         }
 #endif
     }

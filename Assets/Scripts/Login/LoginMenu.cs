@@ -62,6 +62,7 @@ public class LoginMenu : MonoBehaviour
             {
                 case 0:
                     GameManager.Instance.estudiante = JsonConvert.DeserializeObject<Estudiante>(jsonData);
+                    DesafioDiario.CheckAndCreateDesafio();
                     GameManager.Instance.CambiarEscena("MenuEstudiante");
                     break;
                 case 1:
@@ -77,6 +78,7 @@ public class LoginMenu : MonoBehaviour
         else //si no hay un userID pasa a la escena para registrarse y logearse
         {
             Debug.Log("No hay usuario guardado");
+            PlayerPrefs.DeleteAll();
             cargandoText.SetActive(false);
             panelLogin.SetActive(true);
         }
@@ -307,6 +309,7 @@ public class LoginMenu : MonoBehaviour
         if (dataTemp.Rol == 0)
         {
             GameManager.Instance.estudiante = JsonConvert.DeserializeObject<Estudiante>(jsonData); // ahora si se guarda como el rol correspondiente
+            DesafioDiario.CheckAndCreateDesafio();
             GameManager.Instance.CambiarEscena("MenuEstudiante");
         }
         if (dataTemp.Rol == 1)

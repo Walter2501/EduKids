@@ -28,9 +28,16 @@ public class JuegoBase : MonoBehaviour
 
     protected void Start()
     {
-        if (GameManager.Instance.dificultadJuego == 1) maxVecesJugado = 5;
-        else if (GameManager.Instance.dificultadJuego == 2) maxVecesJugado = 10;
-        else maxVecesJugado = 20;
+        if (GameManager.Instance.jugarDesafio == true)
+        {
+            maxVecesJugado = 5;
+        }
+        else
+        {
+            if (GameManager.Instance.dificultadJuego == 1) maxVecesJugado = 5;
+            else if (GameManager.Instance.dificultadJuego == 2) maxVecesJugado = 10;
+            else maxVecesJugado = 20;
+        }
 
         IniciarJuego();
     }
@@ -69,6 +76,64 @@ public class JuegoBase : MonoBehaviour
     {
         panelCargando.SetActive(true);
         yield return new WaitForSeconds(0.75f);
+        if (GameManager.Instance.jugarDesafio == true)
+        {
+            GameManager.Instance.puntosHastaAhora += puntosTotales;
+            if (GameManager.Instance.juegosJugados == 3)
+            {
+                GameManager.Instance.jugarDesafio = false;
+                GameManager.Instance.desafio.DesafioCompletado();
+                DesafioDiario.SaveDesafio(GameManager.Instance.desafio);
+                GameManager.Instance.estudiante.Meritos += GameManager.Instance.puntosHastaAhora;
+                int respuestasDiarias = GameManager.Instance.puntosHastaAhora / 20;
+                NivelCompletado newNivelDesafioDiario = new NivelCompletado("Desafio Diario", 1, $"{respuestasDiarias}/{15}");
+                //Esto para que la lista no sea más larga que 20
+                if (GameManager.Instance.estudiante.nivelesCompletados.Count >= 20)
+                {
+                    GameManager.Instance.estudiante.nivelesCompletados.RemoveAt(0);
+                }
+                GameManager.Instance.estudiante.nivelesCompletados.Add(newNivelDesafioDiario);
+
+                var serverData1 = GameManager.Instance.database.Child("Usuarios").Child(GameManager.Instance.usuarioID).GetValueAsync(); //revisa si existe el usuario
+                yield return new WaitUntil(predicate: () => serverData1.IsCompleted); //se espera a que termine la consulta
+
+                if (serverData1.IsFaulted) //si hubo un error en la consulta cancela todo y manda error
+                {
+                    Debug.LogError("Error al verificar el ID: " + serverData1.Exception);
+                    yield break;
+                }
+
+                DataSnapshot snapshot1 = serverData1.Result;
+
+                if (snapshot1.Exists) //Si la consulta regresa que ya existe el usuarioID en la bdd procede a guardar los datos actualizados
+                {
+                    string json = JsonConvert.SerializeObject(GameManager.Instance.estudiante);
+                    var newDataToSave = GameManager.Instance.database.Child("Usuarios").Child(GameManager.Instance.usuarioID).SetRawJsonValueAsync(json);
+                    yield return new WaitUntil(() => newDataToSave.IsCompleted);
+
+                    if (newDataToSave.IsFaulted)
+                    {
+                        Debug.LogError("Error al guardar los nuevos datos: " + newDataToSave.Exception);
+                    }
+                    else
+                    {
+                        Debug.Log("Datos guardados correctamente");
+                        GameManager.Instance.juegosJugados = 0;
+                        GameManager.Instance.puntosHastaAhora = 0;
+                        GameManager.Instance.CambiarEscena("MenuEstudiante");
+                    }
+                }
+                else //Si por alguna razón ya no existe el usuario sale de la app
+                {
+                    Application.Quit(); //esto solo funciona el el built, no en el editor
+                }
+            }
+            else
+            {
+                GameManager.Instance.juegosJugados++;
+                GameManager.Instance.CambiarEscena(GameManager.Instance.desafio.juegosName[GameManager.Instance.juegosJugados-1]);
+            }
+        }
         int dificultadJuego = GameManager.Instance.dificultadJuego;
         float puntosFloat = puntosTotales;
         if (respuestasCorrectas == maxVecesJugado)

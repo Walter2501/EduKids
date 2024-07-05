@@ -25,7 +25,12 @@ public class GestionEstudiantes : MonoBehaviour
 
     public void DibujarNombreEstudiantes()
     {
-        if (estudiantesID.Count == 0) return; //si no hay estudiantes no hace nada
+        if (estudiantesID.Count == 0)
+        {
+            cargando.SetActive(false);
+            return;
+            //si no hay estudiantes no hace nada
+        }
         for (int i = 0; i < estudiantesID.Count; i++) //si hay estudiantes hace esto por cada uno
         {
             GameObject newObj = Instantiate(prefab, container); //crea el prefab

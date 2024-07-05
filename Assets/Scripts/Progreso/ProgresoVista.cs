@@ -52,7 +52,7 @@ public class ProgresoVista : MonoBehaviour
 
     private void Volver()
     {
-        if (GameManager.Instance.maestro != null) GameManager.Instance.estudiante = null;
+        if (GameManager.Instance.rol == 2) GameManager.Instance.estudiante = null;
         GameManager.Instance.CambiarEscena(escenaVolver);
     }
 }
