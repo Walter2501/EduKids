@@ -6,6 +6,7 @@ using System.Collections.Generic;
 public class Estudiante : UsuarioBase
 {
     public int Meritos;
+    public int MeritosTotal; //Los meritos conseguidos durante todo la vida del usuario, no se restan
     public List<RecompensaData> Recompensas;
     public List<NivelCompletado> nivelesCompletados;
     public Progreso progreso;
@@ -14,6 +15,7 @@ public class Estudiante : UsuarioBase
     public Estudiante(string nombre, string apellido1, string apellido2, string password, string codigoEstudiante) : base(nombre, apellido1, apellido2, password)
     {
         Meritos = 0;
+        MeritosTotal = 0;
         Recompensas = new List<RecompensaData>();
         Rol = 0;
         CodigoEstudiante = codigoEstudiante;

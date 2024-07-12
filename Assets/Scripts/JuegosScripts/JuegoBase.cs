@@ -85,6 +85,7 @@ public class JuegoBase : MonoBehaviour
                 GameManager.Instance.desafio.DesafioCompletado();
                 DesafioDiario.SaveDesafio(GameManager.Instance.desafio);
                 GameManager.Instance.estudiante.Meritos += GameManager.Instance.puntosHastaAhora;
+                GameManager.Instance.estudiante.MeritosTotal += GameManager.Instance.puntosHastaAhora;
                 int respuestasDiarias = GameManager.Instance.puntosHastaAhora / 20;
                 NivelCompletado newNivelDesafioDiario = new NivelCompletado("Desafio Diario", 1, $"{respuestasDiarias}/{15}");
                 //Esto para que la lista no sea más larga que 20
@@ -153,6 +154,7 @@ public class JuegoBase : MonoBehaviour
             puntosTotales = (int) puntosFloat;
         }
         GameManager.Instance.estudiante.Meritos += puntosTotales;
+        GameManager.Instance.estudiante.MeritosTotal += puntosTotales;
         NivelCompletado newNivel = new NivelCompletado(GameManager.Instance.nombreJuego, GameManager.Instance.dificultadJuego, $"{respuestasCorrectas}/{maxVecesJugado}"); 
         //Esto para que la lista no sea más larga que 20
         if (GameManager.Instance.estudiante.nivelesCompletados.Count >= 20)

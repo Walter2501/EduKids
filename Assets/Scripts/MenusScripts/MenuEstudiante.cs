@@ -12,6 +12,7 @@ public class MenuEstudiante : MonoBehaviour
     public Button recompensas;
     public Button desafios;
     public Button progreso;
+    public Button marcador;
 
     private void Start()
     {
@@ -19,6 +20,7 @@ public class MenuEstudiante : MonoBehaviour
         recompensas.onClick.AddListener(IrRecompensas);
         actividades.onClick.AddListener(IrActividades);
         progreso.onClick.AddListener(IrProgreso);
+        marcador.onClick.AddListener(IrMarcador);
         //Pongo el nombre del maestro
         nombreText.text = $"{GameManager.Instance.estudiante.Nombre} {GameManager.Instance.estudiante.Apellido1}";
         meritosText.text = $"Méritos: {GameManager.Instance.estudiante.Meritos}";
@@ -45,6 +47,11 @@ public class MenuEstudiante : MonoBehaviour
     public void IrProgreso()
     {
         GameManager.Instance.CambiarEscena("ProgresoEstudiante");
+    }
+
+    public void IrMarcador()
+    {
+        GameManager.Instance.CambiarEscena("Marcador");
     }
 
     public void EmpezarDesafio()

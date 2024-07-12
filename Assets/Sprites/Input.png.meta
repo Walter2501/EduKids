@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 248cd636a8ed1014283679f84e60c674
+guid: 30f7388246a15b346b73ef09f8fd02d4
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -49,7 +49,7 @@ TextureImporter:
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
   spritePixelsToUnits: 100
-  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteBorder: {x: 100, y: 0, z: 47, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
   alphaIsTransparency: 1
@@ -123,43 +123,22 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Setting menu_0
+      name: Input_0
       rect:
         serializedVersion: 2
-        x: 11
-        y: 10
-        width: 106
-        height: 122
+        x: 18
+        y: 14
+        width: 811
+        height: 185
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 3507664e7bb795245ba7429955532c71
-      internalID: 200441060
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Setting menu_1
-      rect:
-        serializedVersion: 2
-        x: 139
-        y: 10
-        width: 106
-        height: 122
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 03cbd45f5b2d99a4a8985be816381036
-      internalID: -13201810
+      spriteID: 3d27b65e20d82f5468a8e10dffb23ad2
+      internalID: -968879052
       vertices: []
       indices: 
       edges: []
@@ -168,15 +147,14 @@ TextureImporter:
     physicsShape: []
     bones: []
     spriteID: 5e97eb03825dee720800000000000000
-    internalID: 0
+    internalID: 1537655665
     vertices: []
     indices: 
     edges: []
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      Setting menu_0: 200441060
-      Setting menu_1: -13201810
+      Input_0: -968879052
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
