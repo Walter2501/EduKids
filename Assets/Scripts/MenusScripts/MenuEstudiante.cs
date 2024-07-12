@@ -23,7 +23,7 @@ public class MenuEstudiante : MonoBehaviour
         marcador.onClick.AddListener(IrMarcador);
         //Pongo el nombre del maestro
         nombreText.text = $"{GameManager.Instance.estudiante.Nombre} {GameManager.Instance.estudiante.Apellido1}";
-        meritosText.text = $"Méritos: {GameManager.Instance.estudiante.Meritos}";
+        meritosText.text = $"{GameManager.Instance.estudiante.Meritos}";
         if (GameManager.Instance.desafio != null)
         {
             if (GameManager.Instance.desafio.completado == false)
