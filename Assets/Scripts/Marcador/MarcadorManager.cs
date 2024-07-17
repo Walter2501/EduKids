@@ -7,7 +7,6 @@ using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.WSA;
 
 public class MarcadorManager : MonoBehaviour
 {

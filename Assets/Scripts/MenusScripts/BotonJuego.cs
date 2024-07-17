@@ -6,7 +6,6 @@ using UnityEngine.UI;
 public class BotonJuego : MonoBehaviour
 {
     [SerializeField] private string escenaCargar;
-    [SerializeField] private Image imagen;
     [SerializeField] private string nombre;
     [SerializeField] private int juego;
     [SerializeField] private GameObject bloqueo;
