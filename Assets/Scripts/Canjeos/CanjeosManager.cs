@@ -43,6 +43,7 @@ public class CanjeosManager : MonoBehaviour
     public void GetNewList(List<CanjeoData> canjeosToSave)
     {
         cargando = true;
+        panelCargando.SetActive(true);
         StartCoroutine(ActualizarListaCanjeos(canjeosToSave));
     } 
 

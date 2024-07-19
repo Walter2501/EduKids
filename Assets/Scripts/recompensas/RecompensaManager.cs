@@ -8,7 +8,7 @@ using UnityEngine.UI;
 
 public class RecompensaManager : MonoBehaviour
 {
-    [SerializeField] private GameObject itemPrefab;
+    [SerializeField] private RecompensaItem itemPrefab;
     [SerializeField] private Transform container;
     [SerializeField] private GameObject panelCargando;
     [SerializeField] public TMP_InputField inputField, inputField1;
@@ -17,7 +17,7 @@ public class RecompensaManager : MonoBehaviour
     [SerializeField] private Button botonVolver;
 
     private List<RecompensaData> recompensasList;
-    private List<GameObject> recompensasObj = new List<GameObject>();
+    private List<RecompensaItem> recompensasObj = new List<RecompensaItem>();
     private bool cargando = false;
     public bool Cargando => cargando;
 
@@ -37,14 +37,11 @@ public class RecompensaManager : MonoBehaviour
         if (recompensasList.Count == 0) return; //si no hay recompensas se cancelas
         for (int i = 0; i < recompensasList.Count; i++)
         {
-            GameObject newItem = Instantiate(itemPrefab, container); //crea el prefab
+            RecompensaItem newItem = Instantiate(itemPrefab, container); //crea el prefab
             recompensasObj.Add(newItem); //lo añade a la lista de
 
             //Configura sus datos
-            TextMeshProUGUI nombreText = newItem.transform.Find("Fondo_nombre").GetComponentInChildren<TextMeshProUGUI>();
-            nombreText.text = recompensasList[i].nombre;
-            TextMeshProUGUI costoText = newItem.transform.Find("Fondo_cantidad").GetComponentInChildren<TextMeshProUGUI>();
-            costoText.text = recompensasList[i].cantidad.ToString();
+            newItem.SetDatos(recompensasList[i].nombre, recompensasList[i].cantidad.ToString());
         }
     }
 
@@ -73,7 +70,7 @@ public class RecompensaManager : MonoBehaviour
         StartCoroutine(ActualizarListaRecompensas(recompensasListTemp));
     }
 
-    public void EliminarRecompensa(GameObject obj)
+    public void EliminarRecompensa(RecompensaItem obj)
     {
         bool finded = false;
         cargando = true;

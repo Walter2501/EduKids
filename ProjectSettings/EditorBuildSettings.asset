@@ -9,11 +9,14 @@ EditorBuildSettings:
     path: Assets/Scenes/Login/LoginSimple.unity
     guid: da408f4122af31047b7a77ff1c63e06e
   - enabled: 1
-    path: Assets/Scenes/Estudiante/tienda.unity
-    guid: 6d9144139427b664eb3b58a9eb39e5af
+    path: Assets/Scenes/Estudiante/Marcador.unity
+    guid: 55b0a339950eb7042a2261a92b67cb6c
   - enabled: 1
     path: Assets/Scenes/Estudiante/MenuTemp.unity
     guid: 8a7f69407b479b148984cbda8bcce0d7
+  - enabled: 1
+    path: Assets/Scenes/Estudiante/tienda.unity
+    guid: 6d9144139427b664eb3b58a9eb39e5af
   - enabled: 1
     path: Assets/Scenes/juegos/Juego1.unity
     guid: ca23ecf27395174498042e88834b696a
@@ -33,11 +36,17 @@ EditorBuildSettings:
     path: Assets/Scenes/juegos/Juego6.unity
     guid: 2d8fe97d820244240823c0e989a2d362
   - enabled: 1
-    path: Assets/Scenes/Menu/MenuProfesor.unity
-    guid: 7b21588133f0cfc4d8dc743dc51ae3ab
+    path: Assets/Scenes/juegos/juego7.unity
+    guid: d0db90c1ff85d7440ab0c20cdad4e721
   - enabled: 1
     path: Assets/Scenes/Menu/MenuEstudiante.unity
     guid: abaf7b4f3d9f8e04ab0c0ccaa7ce8089
+  - enabled: 1
+    path: Assets/Scenes/Menu/MenuPadre.unity
+    guid: 66fee1fb145dd8943af628c750197e8f
+  - enabled: 1
+    path: Assets/Scenes/Menu/MenuProfesor.unity
+    guid: 7b21588133f0cfc4d8dc743dc51ae3ab
   - enabled: 1
     path: Assets/Scenes/Profesor/Canjeos.unity
     guid: e6222f9fef590fd479d34a1c934b2342
@@ -48,21 +57,9 @@ EditorBuildSettings:
     path: Assets/Scenes/Profesor/RecompensasVista.unity
     guid: df137f5cd676e184cb79a1f2eb36a901
   - enabled: 1
-    path: Assets/Scenes/GestionarRoles.unity
-    guid: 3bad7d2cb5fdc0442a1399a290849fef
-  - enabled: 1
-    path: Assets/Scenes/juegos/juego7.unity
-    guid: d0db90c1ff85d7440ab0c20cdad4e721
-  - enabled: 1
     path: Assets/Scenes/Progreso/ProgresoEstudiante.unity
     guid: b0c73a4555488b847b08e83ee89a1211
   - enabled: 1
     path: Assets/Scenes/Progreso/ProgresoVistaProfesor.unity
     guid: ea1e2058330c12f4da9f905f43b0fe56
-  - enabled: 1
-    path: Assets/Scenes/Menu/MenuPadre.unity
-    guid: 66fee1fb145dd8943af628c750197e8f
-  - enabled: 1
-    path: Assets/Scenes/Estudiante/Marcador.unity
-    guid: 55b0a339950eb7042a2261a92b67cb6c
   m_configObjects: {}
